@@ -1,0 +1,46 @@
+<?php
+/**
+ * Blameable.php
+ *
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:DoctrineBlameable!
+ * @subpackage     Annotation
+ * @since          1.0.0
+ *
+ * @date           01.01.16
+ */
+
+namespace IPub\DoctrineBlameable\Mapping\Annotation;
+
+use Doctrine\Common\Annotations\Annotation;
+
+/**
+ * Blameable annotation for doctrine Blameable extension
+ *
+ * @Annotation
+ * @Target({"PROPERTY"})
+ */
+final class Blameable extends Annotation
+{
+	/**
+	 * @var string
+	 */
+	public $on = 'update';
+
+	/**
+	 * @var string|array
+	 */
+	public $field;
+
+	/**
+	 * @var mixed
+	 */
+	public $value;
+
+	/**
+	 * @var array|NULL
+	 */
+	public $association;
+}
