@@ -30,7 +30,7 @@ class Configuration extends Nette\Object
 	/**
 	 * Flag if use lazy association or not
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	public $lazyAssociation = FALSE;
 
@@ -51,6 +51,7 @@ class Configuration extends Nette\Object
 	/**
 	 * @param string $userEntity
 	 * @param bool $lazyAssociation
+	 * @param bool $automapField
 	 */
 	public function __construct($userEntity, $lazyAssociation = FALSE, $automapField = FALSE)
 	{

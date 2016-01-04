@@ -410,8 +410,8 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 					$config = $this->readExtendedMetadata($parentClassMetadata, $config);
 
 					$isBaseInheritanceLevel = !$parentClassMetadata->isInheritanceTypeNone()
-						&& !$parentClassMetadata->parentClasses
-						&& $config;
+						&& $parentClassMetadata->parentClasses !== []
+						&& $config !== [];
 
 					if ($isBaseInheritanceLevel) {
 						$useObjectName = $class->name;
@@ -422,7 +422,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 			$config = $this->readExtendedMetadata($classMetadata, $config);
 		}
 
-		if ($config) {
+		if ($config !== []) {
 			$config['useObjectClass'] = $useObjectName;
 		}
 
