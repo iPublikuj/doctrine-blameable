@@ -138,6 +138,53 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('secondUser', $entity->getDeletedBy());
 	}
 
+	public function testWithUserCallback()
+	{
+		$this->generateDbSchema();
+
+		$user = new Models\UserEntity;
+		$user->setUsername('user');
+
+		$tester = new Models\UserEntity;
+		$tester->setUsername('tester');
+
+		$userCallback = function() use($user) {
+			return $user;
+		};
+
+		$this->listener->setUserCallable($userCallback);
+
+		$this->em->persist($user);
+		$this->em->persist($tester);
+		$this->em->flush();
+
+		$entity = new Models\BlameableEntity;
+
+		$this->em->persist($entity);
+		$this->em->flush();
+
+		$id = $entity->getId();
+
+		$createdBy = $entity->getCreatedBy();
+
+		$this->listener->setUser($tester); // Switch user for update
+
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
+		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
+
+		$this->em->flush();
+		$this->em->clear();
+
+		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity, 'createdBy is a user object');
+		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername(), 'createdBy is constant');
+		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
+		Assert::notEqual(
+			$entity->getCreatedBy(),
+			$entity->getUpdatedBy(),
+			'createBy and updatedBy have diverged since new update'
+		);
+	}
+
 	private function generateDbSchema()
 	{
 		$schema = new ORM\Tools\SchemaTool($this->em);

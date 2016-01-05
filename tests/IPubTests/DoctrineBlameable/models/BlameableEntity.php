@@ -29,6 +29,7 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	use Entities\TEntityEditor;
 
 	/**
+	 * @var int
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -36,6 +37,7 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	private $id;
 
 	/**
+	 * @var string
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	private $title;
@@ -48,8 +50,6 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	protected $deletedBy;
 
 	/**
-	 * Returns object id
-	 *
 	 * @return int
 	 */
 	public function getId()
@@ -58,9 +58,7 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	}
 
 	/**
-	 * Get title
-	 *
-	 * @return string title
+	 * @return string
 	 */
 	public function getTitle()
 	{
@@ -68,8 +66,6 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	}
 
 	/**
-	 * Set title
-	 *
 	 * @param string $title
 	 */
 	public function setTitle($title)
