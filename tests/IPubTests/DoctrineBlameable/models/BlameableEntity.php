@@ -40,6 +40,13 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	private $title;
 
 	/**
+	 * @var mixed
+	 *
+	 * @IPub\Blameable(on="delete")
+	 */
+	protected $deletedBy;
+
+	/**
 	 * Returns object id
 	 *
 	 * @return int
@@ -67,5 +74,21 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+
+	/**
+	 * @param mixed $deletedBy
+	 */
+	public function setDeletedBy($deletedBy)
+	{
+		$this->deletedBy = $deletedBy;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDeletedBy()
+	{
+		return $this->deletedBy;
 	}
 }

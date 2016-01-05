@@ -99,7 +99,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('secondUser');
 
-		$entity = $this->em->getRepository('Models\BlameableEntity')->find($id);
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
 		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
@@ -112,6 +112,30 @@ class BlameableTest extends Tester\TestCase
 			$entity->getUpdatedBy(),
 			'createBy and updatedBy have diverged since new update'
 		);
+	}
+
+	public function testRemove()
+	{
+		$this->generateDbSchema();
+
+		$entity = new Models\BlameableEntity;
+
+		$this->em->persist($entity);
+		$this->em->flush();
+
+		$id = $entity->getId();
+
+		$this->em->clear();
+
+		$this->listener->setUser('secondUser');
+
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
+
+		$this->em->remove($entity);
+		$this->em->flush();
+		$this->em->clear();
+
+		Assert::equal('secondUser', $entity->getDeletedBy());
 	}
 
 	private function generateDbSchema()
