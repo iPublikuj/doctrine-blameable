@@ -18,7 +18,8 @@ use Nette;
 use Nette\Http;
 
 /**
- * Doctrine blameable extension configuration storage. Store basic extension settings
+ * Doctrine blameable extension configuration storage
+ * Store basic extension settings
  *
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     common

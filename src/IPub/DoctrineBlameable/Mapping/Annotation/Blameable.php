@@ -17,7 +17,12 @@ namespace IPub\DoctrineBlameable\Mapping\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Blameable annotation for doctrine Blameable extension
+ * Doctrine blameable annotation for Doctrine2
+ *
+ * @package        iPublikuj:DoctrinePhone!
+ * @subpackage     Annotation
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @Annotation
  * @Target({"PROPERTY"})

@@ -82,7 +82,10 @@ class DoctrineBlameableExtension extends DI\CompilerExtension
 			$userCallable = $definition;
 		}
 
-		$builder->addDefinition($this->prefix('blameableListener'))
+		$builder->addDefinition($this->prefix('driver'))
+			->setClass('IPub\DoctrineBlameable\Mapping\Driver\Blameable');
+
+		$builder->addDefinition($this->prefix('listener'))
 			->setClass('IPub\DoctrineBlameable\Events\BlameableListener')
 			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL])
 			->addTag(Events\DI\EventsExtension::TAG_SUBSCRIBER);

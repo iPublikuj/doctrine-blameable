@@ -14,9 +14,14 @@
 
 namespace IPub\DoctrineBlameable\Entities;
 
-use Nette;
-use Nette\Security as NS;
-
+/**
+ * Doctrine blameable editor entity interface
+ *
+ * @package        iPublikuj:DoctrinePhone!
+ * @subpackage     Entities
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
 interface IEntityEditor
 {
 	/**

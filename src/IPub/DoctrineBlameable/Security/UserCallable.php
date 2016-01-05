@@ -1,10 +1,30 @@
 <?php
+/**
+ * UserCallable.php
+ *
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:DoctrineBlameable!
+ * @subpackage     Security
+ * @since          1.0.0
+ *
+ * @date           05.01.16
+ */
 
 namespace IPub\DoctrineBlameable\Security;
 
 use Nette;
 use Nette\Security as NS;
 
+/**
+ * Doctrine blameable default user callable
+ *
+ * @package        iPublikuj:DoctrineBlameable!
+ * @subpackage     Security
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
 class UserCallable
 {
 	/**

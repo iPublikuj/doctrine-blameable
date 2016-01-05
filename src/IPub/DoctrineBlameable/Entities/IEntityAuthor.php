@@ -14,9 +14,14 @@
 
 namespace IPub\DoctrineBlameable\Entities;
 
-use Nette;
-use Nette\Security as NS;
-
+/**
+ * Doctrine blameable author entity interface
+ *
+ * @package        iPublikuj:DoctrinePhone!
+ * @subpackage     Entities
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
 interface IEntityAuthor
 {
 	/**
@@ -24,10 +29,10 @@ interface IEntityAuthor
 	 *
 	 * @return $this
 	 */
-	public function setCreatedBy($createdBy);
+	function setCreatedBy($createdBy);
 
 	/**
 	 * @return mixed
 	 */
-	public function getCreatedBy();
+	function getCreatedBy();
 }

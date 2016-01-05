@@ -14,10 +14,16 @@
 
 namespace IPub\DoctrineBlameable\Entities;
 
-use Doctrine\ORM\Mapping as ORM;
-
 use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 
+/**
+ * Doctrine blameable author entity
+ *
+ * @package        iPublikuj:DoctrinePhone!
+ * @subpackage     Entities
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
 trait TEntityAuthor
 {
 	/**
