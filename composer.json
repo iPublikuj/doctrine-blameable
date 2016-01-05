@@ -22,7 +22,7 @@
 	"require": {
 		"php"	: ">=5.4.0",
 
-		"doctrine/orm"	: "~2.5",
+		"doctrine/orm"	: "~2.4",
 
 		"nette/di"		: "~2.2",
 		"nette/utils"	: "~2.2",
