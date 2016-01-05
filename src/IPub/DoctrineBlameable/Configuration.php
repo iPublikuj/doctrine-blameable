@@ -47,7 +47,7 @@ class Configuration extends Nette\Object
 	 *
 	 * @var bool
 	 */
-	public $automapField = FALSE;
+	public $automapField = TRUE;
 
 	/**
 	 * @param string $userEntity
