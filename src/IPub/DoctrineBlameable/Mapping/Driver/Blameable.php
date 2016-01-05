@@ -166,6 +166,7 @@ final class Blameable extends Nette\Object
 				continue;
 			}
 
+			/** @var Mapping\Annotation\Blameable $blameable */
 			if ($blameable = $reader->getPropertyAnnotation($property, self::EXTENSION_ANNOTATION)) {
 				$field = $property->getName();
 
