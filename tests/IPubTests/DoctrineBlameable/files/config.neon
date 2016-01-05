@@ -26,9 +26,6 @@ common:
 		driver: pdo_sqlite
 		memory: true
 
-	doctrinePhone:
-		cache: array
-
 v22 < common:
 	nette:
 		security:
