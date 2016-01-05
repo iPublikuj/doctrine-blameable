@@ -81,6 +81,39 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('tester', $entity->getModifiedBy());
 	}
 
+	public function testUpdate()
+	{
+		$this->generateDbSchema();
+
+		$entity = new Models\BlameableEntity;
+
+		$this->em->persist($entity);
+		$this->em->flush();
+
+		$id = $entity->getId();
+		$createdBy = $entity->getCreatedBy();
+
+		$this->em->clear();
+
+		$subscribers = $this->em->getEventManager()->getListeners()['preUpdate'];
+		$subscriber = array_pop($subscribers);
+		$subscriber->setUser('user2');
+
+		$entity = $this->em->getRepository('Models\BlameableEntity')->find($id);
+		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
+
+		$this->em->flush();
+		$this->em->clear();
+
+		Assert::equal($createdBy, $entity->getCreatedBy(), 'createdBy is constant');
+		Assert::equal('user2', $entity->getUpdatedBy());
+		Assert::notEqual(
+			$entity->getCreatedBy(),
+			$entity->getUpdatedBy(),
+			'createBy and updatedBy have diverged since new update'
+		);
+	}
+
 	private function generateDbSchema()
 	{
 		$schema = new ORM\Tools\SchemaTool($this->em);
