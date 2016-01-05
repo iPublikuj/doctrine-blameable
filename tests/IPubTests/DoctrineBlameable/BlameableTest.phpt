@@ -31,6 +31,7 @@ use IPub\DoctrineBlameable\Mapping;
 
 require __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/models/BlameableEntity.php';
+require_once __DIR__ . '/models/UserEntity.php';
 
 /**
  * Registering doctrine blameable functions tests
