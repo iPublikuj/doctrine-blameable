@@ -27,6 +27,7 @@
 		"nette/di"			: "~2.2",
 		"nette/utils"		: "~2.2",
 		"nette/security"	: "~2.2",
+		"nette/http"		: "~2.2",
 
 		"kdyby/events"	: "~2.3"
 	},
