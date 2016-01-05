@@ -187,10 +187,10 @@ class BlameableTest extends Tester\TestCase
 
 		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity, 'createdBy is a user object');
 		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername(), 'createdBy is constant');
-		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
+		Assert::equal($tester->getUsername(), $entity->getModifiedBy()->getUsername());
 		Assert::notEqual(
 			$entity->getCreatedBy(),
-			$entity->getUpdatedBy(),
+			$entity->getModifiedBy(),
 			'createBy and updatedBy have diverged since new update'
 		);
 	}
