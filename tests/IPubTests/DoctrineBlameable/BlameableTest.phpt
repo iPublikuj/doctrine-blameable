@@ -101,7 +101,7 @@ class BlameableTest extends Tester\TestCase
 		$config->addParameters(['appDir' => $rootDir, 'wwwDir' => $rootDir]);
 
 		$config->addConfig(__DIR__ . '/files/config.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
-		$config->addConfig(__DIR__ . '/files/address.neon', $config::NONE);
+		$config->addConfig(__DIR__ . '/files/entities.neon', $config::NONE);
 
 		DoctrineBlameable\DI\DoctrineBlameableExtension::register($config);
 
