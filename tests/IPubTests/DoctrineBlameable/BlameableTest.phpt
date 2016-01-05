@@ -147,10 +147,10 @@ class BlameableTest extends Tester\TestCase
 
 	public function testWithUserCallback()
 	{
-		$this->generateDbSchema();
-
 		// Define entity name
 		$this->configuration->userEntity = 'IPubTests\DoctrineBlameable\Models\UserEntity';
+
+		$this->generateDbSchema();
 
 		$user = new Models\UserEntity;
 		$user->setUsername('user');
