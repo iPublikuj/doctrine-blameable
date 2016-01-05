@@ -195,6 +195,9 @@ class BlameableTest extends Tester\TestCase
 		);
 	}
 
+	/**
+	 * @throws \IPub\DoctrineBlameable\Exceptions\InvalidArgumentException
+	 */
 	public function testPersistOnlyWithEntity()
 	{
 		// Define entity name
@@ -220,11 +223,11 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->persist($entity);
 		$this->em->flush();
-
-		Assert::null($entity->getCreatedBy(), 'createdBy is a not updated because not a user entity object');
-		Assert::null($entity->getModifiedBy(), 'updatedBy is a not updated because not a user entity object');
 	}
 
+	/**
+	 * @throws \IPub\DoctrineBlameable\Exceptions\InvalidArgumentException
+	 */
 	public function testPersistOnlyWithString()
 	{
 		$this->generateDbSchema();
@@ -238,9 +241,6 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->persist($entity);
 		$this->em->flush();
-
-		Assert::null($entity->getCreatedBy(), 'createdBy is a not updated because not a user entity object');
-		Assert::null($entity->getUpdatedBy(), 'updatedBy is a not updated because not a user entity object');
 	}
 
 	private function generateDbSchema()
