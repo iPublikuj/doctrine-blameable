@@ -18,6 +18,7 @@ namespace IPubTests\DoctrineBlameable\Models;
 use Doctrine\ORM\Mapping as ORM;
 
 use IPub\DoctrineBlameable\Entities;
+use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 
 /**
  * @ORM\Entity
