@@ -49,8 +49,15 @@ class ExtensionTest extends Tester\TestCase
 	 */
 	protected function createContainer()
 	{
+		$rootDir = __DIR__ . '/../../';
+
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
+
+		$config->addParameters(['container' => ['class' => 'SystemContainer_' . md5(time())]]);
+		$config->addParameters(['appDir' => $rootDir, 'wwwDir' => $rootDir]);
+
+		$config->addConfig(__DIR__ . '/files/config.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
 
 		DoctrineBlameable\DI\DoctrineBlameableExtension::register($config);
 
