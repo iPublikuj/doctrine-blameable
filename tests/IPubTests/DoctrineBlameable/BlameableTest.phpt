@@ -195,6 +195,54 @@ class BlameableTest extends Tester\TestCase
 		);
 	}
 
+	public function testPersistOnlyWithEntity()
+	{
+		// Define entity name
+		$this->configuration->userEntity = 'IPubTests\DoctrineBlameable\Models\UserEntity';
+
+		$this->generateDbSchema();
+
+		$user = new Models\UserEntity;
+		$user->setUsername('user');
+
+		$userCallback = function() use($user) {
+			return $user;
+		};
+
+		$this->listener->setUserCallable($userCallback);
+		// Override user
+		$this->listener->setUser('anonymous');
+
+		$this->em->persist($user);
+		$this->em->flush();
+
+		$entity = new Models\BlameableEntity;
+
+		$this->em->persist($entity);
+		$this->em->flush();
+
+		Assert::null($entity->getCreatedBy(), 'createdBy is a not updated because not a user entity object');
+		Assert::null($entity->getModifiedBy(), 'updatedBy is a not updated because not a user entity object');
+	}
+
+	public function testPersistOnlyWithString()
+	{
+		$this->generateDbSchema();
+
+		$user = new Models\UserEntity;
+
+		// Override user
+		$this->listener->setUser($user);
+
+		$entity = new Models\BlameableEntity;
+
+		$this->em->persist($entity);
+		$this->em->flush();
+
+		Assert::null($entity->getCreatedBy(), 'createdBy is a not updated because not a user entity object');
+		Assert::null($entity->getUpdatedBy(), 'updatedBy is a not updated because not a user entity object');
+	}
+
 	private function generateDbSchema()
 	{
 		$schema = new ORM\Tools\SchemaTool($this->em);
