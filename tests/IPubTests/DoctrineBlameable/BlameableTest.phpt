@@ -106,10 +106,10 @@ class BlameableTest extends Tester\TestCase
 		$this->em->clear();
 
 		Assert::equal($createdBy, $entity->getCreatedBy(), 'createdBy is constant');
-		Assert::equal('secondUser', $entity->getUpdatedBy());
+		Assert::equal('secondUser', $entity->getModifiedBy());
 		Assert::notEqual(
 			$entity->getCreatedBy(),
-			$entity->getUpdatedBy(),
+			$entity->getModifiedBy(),
 			'createBy and updatedBy have diverged since new update'
 		);
 	}
