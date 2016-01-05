@@ -58,6 +58,11 @@ class BlameableTest extends Tester\TestCase
 	 */
 	private $listener;
 
+	/**
+	 * @var DoctrineBlameable\Configuration
+	 */
+	private $configuration;
+
 	protected function setUp()
 	{
 		parent::setUp();
@@ -65,6 +70,7 @@ class BlameableTest extends Tester\TestCase
 		$this->container = $this->createContainer();
 		$this->em = $this->container->getByType('Kdyby\Doctrine\EntityManager');
 		$this->listener = $this->container->getByType('IPub\DoctrineBlameable\Events\BlameableListener');
+		$this->configuration = $this->container->getByType('IPub\DoctrineBlameable\Configuration');
 	}
 
 	public function testCreate()
@@ -142,6 +148,9 @@ class BlameableTest extends Tester\TestCase
 	public function testWithUserCallback()
 	{
 		$this->generateDbSchema();
+
+		// Define entity name
+		$this->configuration->userEntity = 'IPubTests\DoctrineBlameable\Models\UserEntity';
 
 		$user = new Models\UserEntity;
 		$user->setUsername('user');
