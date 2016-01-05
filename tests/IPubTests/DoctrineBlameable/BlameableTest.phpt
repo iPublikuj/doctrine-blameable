@@ -85,6 +85,8 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
+		$this->listener->setUser('tester');
+
 		$entity = new Models\BlameableEntity;
 
 		$this->em->persist($entity);
@@ -95,9 +97,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->clear();
 
-		$subscribers = $this->em->getEventManager()->getListeners()['preUpdate'];
-		$subscriber = array_pop($subscribers);
-		$subscriber->setUser('user2');
+		$this->listener->setUser('secondUser');
 
 		$entity = $this->em->getRepository('Models\BlameableEntity')->find($id);
 		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
@@ -106,7 +106,7 @@ class BlameableTest extends Tester\TestCase
 		$this->em->clear();
 
 		Assert::equal($createdBy, $entity->getCreatedBy(), 'createdBy is constant');
-		Assert::equal('user2', $entity->getUpdatedBy());
+		Assert::equal('secondUser', $entity->getUpdatedBy());
 		Assert::notEqual(
 			$entity->getCreatedBy(),
 			$entity->getUpdatedBy(),
