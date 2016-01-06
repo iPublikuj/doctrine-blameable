@@ -262,7 +262,7 @@ class BlameableTest extends Tester\TestCase
 
 		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('myuser', $sport->setCreatedBy());
+		Assert::equal('myuser', $sport->getCreatedBy());
 		Assert::equal('myuser', $sport->getUpdatedBy());
 		Assert::null($sport->getPublishedBy());
 
