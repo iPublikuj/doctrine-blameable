@@ -115,6 +115,24 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal($createdBy, $entity->getCreatedBy());
 		Assert::equal('secondUser', $entity->getUpdatedBy());
 		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
+
+		$this->listener->setUser('publisher');
+
+		$published = new Models\TypeEntity;
+		$published->setTitle('Published');
+
+		$entity->setType($published);
+
+		$this->em->persist($entity);
+		$this->em->persist($published);
+		$this->em->flush();
+		$this->em->clear();
+
+		$id = $entity->getId();
+
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+
+		Assert::equal('publisher', $entity->getPublishedBy());
 	}
 
 	public function testRemove()
