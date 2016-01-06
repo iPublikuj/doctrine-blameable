@@ -23,9 +23,9 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 /**
  * @ORM\Entity
  */
-class ArticleEntity implements Entities\IEntityAuthor, Entities\IEntityEditor, Entities\IEntityRemover
+class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, Entities\IEntityRemover
 {
-	use Entities\TEntityAuthor;
+	use Entities\TEntityCreator;
 	use Entities\TEntityEditor;
 	use Entities\TEntityRemover;
 
