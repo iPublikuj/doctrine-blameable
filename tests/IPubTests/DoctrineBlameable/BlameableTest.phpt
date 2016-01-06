@@ -110,7 +110,6 @@ class BlameableTest extends Tester\TestCase
 		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
-		$this->em->clear();
 
 		Assert::equal($createdBy, $entity->getCreatedBy());
 		Assert::equal('secondUser', $entity->getUpdatedBy());
