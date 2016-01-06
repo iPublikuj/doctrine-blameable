@@ -96,11 +96,11 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		$this->driver->loadMetadataForObjectClass($classMetadata);
 
 		// Register pre persist event
-		//$this->registerEvent($classMetadata, ORM\Events::prePersist);
+		$this->registerEvent($classMetadata, ORM\Events::prePersist);
 		// Register pre update event
-		//$this->registerEvent($classMetadata, ORM\Events::preUpdate);
+		$this->registerEvent($classMetadata, ORM\Events::preUpdate);
 		// Register pre remove event
-		//$this->registerEvent($classMetadata, ORM\Events::preRemove);
+		$this->registerEvent($classMetadata, ORM\Events::preRemove);
 	}
 
 	/**
@@ -232,11 +232,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			foreach(['update', 'create'] as $event) {
 				if (isset($config[$event])) {
-					foreach ($config[$event] as $field) {
-						if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
-							$this->updateField($uow, $entity, $classMetadata, $field);
-						}
-					}
+					$this->updateFields($config[$event], $uow, $entity, $classMetadata);
 				}
 			}
 		}
@@ -254,11 +250,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
-				foreach ($config['update'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
-						$this->updateField($uow, $entity, $classMetadata, $field);
-					}
-				}
+				$this->updateFields($config['update'], $uow, $entity, $classMetadata);
 			}
 		}
 	}
@@ -275,11 +267,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['delete'])) {
-				foreach ($config['delete'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
-						$this->updateField($uow, $entity, $classMetadata, $field);
-					}
-				}
+				$this->updateFields($config['delete'], $uow, $entity, $classMetadata);
 			}
 		}
 	}
@@ -323,26 +311,28 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 	}
 
 	/**
-	 * Updates a field
-	 *
+	 * @param array $fields
 	 * @param ORM\UnitOfWork $uow
 	 * @param mixed $object
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
-	 * @param string $field
 	 */
-	private function updateField(ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata, $field)
+	private function updateFields(array $fields, ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata)
 	{
-		$property = $classMetadata->getReflectionProperty($field);
+		foreach ($fields as $field) {
+			if ($classMetadata->getReflectionProperty($field)->getValue($object) === NULL) { // let manual values
+				$property = $classMetadata->getReflectionProperty($field);
 
-		$oldValue = $property->getValue($object);
-		$newValue = $this->getUserValue($classMetadata, $field);
+				$oldValue = $property->getValue($object);
+				$newValue = $this->getUserValue($classMetadata, $field);
 
-		$property->setValue($object, $newValue);
+				$property->setValue($object, $newValue);
 
-		$uow->propertyChanged($object, $field, $oldValue, $newValue);
-		$uow->scheduleExtraUpdate($object, [
-			$field => [$oldValue, $newValue],
-		]);
+				$uow->propertyChanged($object, $field, $oldValue, $newValue);
+				$uow->scheduleExtraUpdate($object, [
+					$field => [$oldValue, $newValue],
+				]);
+			}
+		}
 	}
 
 	/**
