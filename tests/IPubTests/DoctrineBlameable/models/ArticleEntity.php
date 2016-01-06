@@ -6,7 +6,7 @@
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
  * @author         Adam Kadlec http://www.ipublikuj.eu
- * @package        iPublikuj:DoctrinePhone!
+ * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Tests
  * @since          1.0.0
  *

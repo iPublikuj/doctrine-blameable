@@ -19,7 +19,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 /**
  * Doctrine blameable author entity
  *
- * @package        iPublikuj:DoctrinePhone!
+ * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

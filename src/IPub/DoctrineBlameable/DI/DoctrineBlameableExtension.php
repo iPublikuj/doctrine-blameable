@@ -28,7 +28,7 @@ use IPub\DoctrineBlameable\Security;
 /**
  * Doctrine blameable extension container
  *
- * @package        iPublikuj:DoctrinePhone!
+ * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

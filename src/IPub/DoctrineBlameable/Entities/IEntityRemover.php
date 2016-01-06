@@ -17,7 +17,7 @@ namespace IPub\DoctrineBlameable\Entities;
 /**
  * Doctrine blameable remover entity interface
  *
- * @package        iPublikuj:DoctrinePhone!
+ * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

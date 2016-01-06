@@ -19,7 +19,7 @@ use Doctrine\Common\Annotations\Annotation;
 /**
  * Doctrine blameable annotation for Doctrine2
  *
- * @package        iPublikuj:DoctrinePhone!
+ * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Annotation
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
