@@ -1,6 +1,7 @@
 # Quickstart
 
-Blameable behavior will automate the update of username or user reference fields on your Entities in [Nette Framework](http://nette.org/) and [Doctrine 2](http://www.doctrine-project.org/)
+Blameable behavior will automate the update of username or user reference fields on your Entities in [Nette Framework](http://nette.org/) and [Doctrine 2](http://www.doctrine-project.org/).
+This extension is using annotations and can update fields on creation, update, delete, property subset update, or even on specific property value change.
 
 ## Installation
 
@@ -32,9 +33,9 @@ If you map the blame onto a string field, this extension will try to assign the 
 * **value**: is used only for event change and with tracked field. When the value of tracked field is same as defined, blame is invoked.
 * **association**: is like in doctrine column definition. It support two sub-attributes: **column** which define column name in database and **referencedColumn** referenced column name in database
 
-### Getting user data
+### Assigning user data to listener
 
-This extension needs some information about user - username, id or full entity, it depend on type of association. By default is set string association, so user value have to be string or integer.
+This extension needs some information about user - username, id or full entity, it depend on type of association. By default is set string association, so user value have to be string or integer value.
 To obtain user information a special [user service](https://github.com/iPublikuj/doctrine-blameable/blob/master/src/IPub/DoctrineBlameable/Security/UserCallable.php) is used. This service grab usual Nette\Security\User identity and provide it to the listener.
 
 If you want to use your custom callable, just define it in the configuration:
@@ -44,7 +45,12 @@ doctrineBlameable:
     userCallable: Namespace\To\Your\UserCallable::class
 ```
 
-If don't want to use user callable object, you can directly send user details to extension listener:
+If don't want to use user callable object, you can directly set user details to extension listener and disable user callable service:
+
+```neon
+doctrineBlameable:
+    userCallable: NULL
+```
 
 ```php
 $blameableListener->setUser($yourUserDetails);
@@ -56,7 +62,7 @@ But remember, if you are using string field association, provided value have to 
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -107,30 +113,7 @@ class Article
      */
     private $contentChangedBy;
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    public function setBody($body)
-    {
-        $this->body = $body;
-    }
-
-    public function getBody()
-    {
-        return $this->body;
-    }
+    // ...
 
     public function getCreatedBy()
     {
@@ -153,7 +136,7 @@ class Article
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -207,30 +190,7 @@ class Article
      */
     private $contentChangedBy;
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    public function setBody($body)
-    {
-        $this->body = $body;
-    }
-
-    public function getBody()
-    {
-        return $this->body;
-    }
+    // ...
 
     public function getCreatedBy()
     {
@@ -253,13 +213,13 @@ class Article
 
 Columns doesn't have to be specified with doctrine ORM definition, this extension can map them automatically, all depends on how you configure it.
 
-#### Automated with string field
+#### Automatic associations with string field
 
 This type is by default. Listener will map field as doctrine usually do:
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -278,11 +238,11 @@ class Article
 }
 ```
 
-Column ```$createdBy``` will be mapped as string field with column name ```created_by```
+Entity property ```$createdBy``` will be mapped as string field with column name ```created_by```
 
-#### Automated with entity association
+#### Automatic associations with entity reference
 
-At first, you have to provide name of your user entity to extension configuration
+At first, you have to provide name of your user entity in extension configuration
 
 ```neon
 doctrineBlameable:
@@ -291,7 +251,7 @@ doctrineBlameable:
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -310,13 +270,13 @@ class Article
 }
 ```
 
-Column ```$createdBy``` will be mapped as association field to entity ```Namespace\To\Your\UserEntity``` and with column name ```created_by_id``` and with referenced column name ```id```
+Entity property ```$createdBy``` will be mapped as association field to entity ```Namespace\To\Your\UserEntity``` and with column name ```created_by_id``` and with referenced column name ```id```
 
-If you need to change column name in database or reference column name, you can use attributes:
+If you need to change column name or reference column name in database, you can use attributes:
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -341,7 +301,7 @@ One entity can relay on other entity, and blame could be triggered after externa
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -371,11 +331,11 @@ class Type
 }
 ```
 
-And we want to monitor when the article is published - The type is changed.
+And we want to monitor when the article is **published** - the type is changed.
 
 ```php
 <?php
-namespace Entity;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\Mapping\Annotation as IPub;
@@ -413,7 +373,51 @@ class Article
     // ...
 ```
 
-When the article type is changed to **Published** blame event for ```$publishedBy``` will be invoked.
+When the article type is changed to **Published** blame event for ```$publishedBy``` will be triggered.
+
+You can even monitor more than one value:
+
+```php
+<?php
+namespace Your\Cool\Namespace;
+
+use Doctrine\ORM\Mapping as ORM;
+use IPub\Mapping\Annotation as IPub;
+
+/**
+ * @ORM\Entity
+ */
+class Article
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    private $title;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Type", inversedBy="articles")
+     */
+    private $type;
+
+    /**
+     * @var string $publishedBy
+     *
+     * @ORM\Column(type="string", nullable=true)
+     * @IPub\Blameable(on="change", field="type.title", value={"Published", "Deleted"})
+     */
+    private $publishedBy;
+
+    // ...
+```
+
+Now property ```$publishedBy``` will be changed when article type is set to **Published** or **Deleted**
 
 ### Using traits
 
@@ -423,7 +427,7 @@ You can use extension traits for quick createdBy updatedBy property definitions.
 
 ```php
 <?php
-namespace Blameable\Fixture;
+namespace Your\Cool\Namespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use IPub\DoctrineBlameable\Entities;
@@ -431,7 +435,7 @@ use IPub\DoctrineBlameable\Entities;
 /**
  * @ORM\Entity
  */
-class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,
+class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,, Entities\IEntityRemover
 {
     /**
      * Hook blameable behavior for entity author
@@ -444,6 +448,12 @@ class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,
      * updates updatedBy field
      */
     use Entities\TEntityEditor;
+
+    /**
+     * Hook blameable behavior for entity deleter
+     * updates updatedBy field
+     */
+    use Entities\TEntityRemover;
 
     /**
      * @ORM\Id
