@@ -27,24 +27,22 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 trait TEntityCreator
 {
 	/**
-	 * @var mixed
+	 * @var mixed|NULL
 	 *
 	 * @IPub\Blameable(on="create")
 	 */
 	protected $createdBy;
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $createdBy
 	 */
 	public function setCreatedBy($createdBy)
 	{
 		$this->createdBy = $createdBy;
-
-		return $this;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return mixed|NULL
 	 */
 	public function getCreatedBy()
 	{

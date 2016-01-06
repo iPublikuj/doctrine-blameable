@@ -27,24 +27,22 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 trait TEntityRemover
 {
 	/**
-	 * @var mixed
+	 * @var mixed|NULL
 	 *
 	 * @IPub\Blameable(on="delete")
 	 */
 	protected $deletedBy;
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $deletedBy
 	 */
 	public function setDeletedBy($deletedBy)
 	{
 		$this->deletedBy = $deletedBy;
-
-		return $this;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return mixed|NULL
 	 */
 	public function getDeletedBy()
 	{

@@ -27,24 +27,22 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 trait TEntityEditor
 {
 	/**
-	 * @var mixed
+	 * @var mixed|NULL
 	 *
 	 * @IPub\Blameable(on="update")
 	 */
 	protected $updatedBy;
 
 	/**
-	 * {@inheritdoc}
+	 * @param mixed $updatedBy
 	 */
 	public function setUpdatedBy($updatedBy)
 	{
 		$this->updatedBy = $updatedBy;
-
-		return $this;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @return mixed|NULL
 	 */
 	public function getUpdatedBy()
 	{
