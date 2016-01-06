@@ -242,6 +242,10 @@ class BlameableTest extends Tester\TestCase
 		$this->generateDbSchema();
 
 		$user = new Models\UserEntity;
+		$user->setUsername('user');
+
+		$this->em->persist($user);
+		$this->em->flush();
 
 		// Override user
 		$this->listener->setUser($user);
