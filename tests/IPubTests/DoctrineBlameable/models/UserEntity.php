@@ -51,12 +51,4 @@ class UserEntity
 	{
 		$this->username = $username;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return $this->username;
-	}
 }

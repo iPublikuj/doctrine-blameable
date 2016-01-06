@@ -102,12 +102,4 @@ class ArticleEntity implements Entities\IEntityAuthor, Entities\IEntityEditor, E
 	{
 		return $this->publishedBy;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return $this->title;
-	}
 }
