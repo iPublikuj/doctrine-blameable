@@ -239,7 +239,7 @@ final class Blameable extends Nette\Object
 					$field = [
 						'field'        => $field,
 						'trackedField' => $blameable->field,
-						'value'        => $blameable->value,
+						'value'        => is_array($blameable->value) ? $blameable->value : [$blameable->value],
 					];
 				}
 
