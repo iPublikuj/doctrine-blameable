@@ -31,7 +31,9 @@ use IPub\DoctrineBlameable\Mapping;
 
 require __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/models/ArticleEntity.php';
+require_once __DIR__ . '/models/ArticleMultiChangeEntity.php';
 require_once __DIR__ . '/models/UserEntity.php';
+require_once __DIR__ . '/models/TypeEntity.php';
 
 /**
  * Registering doctrine blameable functions tests
@@ -312,6 +314,68 @@ class BlameableTest extends Tester\TestCase
 		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
 		Assert::equal('forcedUser', $article->getPublishedBy());
+	}
+
+	public function testMultipleValueTrackingField()
+	{
+		$this->generateDbSchema();
+
+		$this->listener->setUser('author');
+
+		$article = new Models\ArticleEntity;
+
+		$this->em->persist($article);
+		$this->em->flush();
+
+		$id = $article->getId();
+
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+
+		Assert::equal('author', $article->getCreatedBy());
+		Assert::equal('author', $article->getUpdatedBy());
+		Assert::null($article->getPublishedBy());
+
+		$draft = new Models\TypeEntity;
+		$draft->setTitle('Draft');
+
+		$article->setType($draft);
+
+		$this->em->persist($article);
+		$this->em->persist($draft);
+		$this->em->flush();
+
+		Assert::null($article->getPublishedBy());
+
+		$published = new Models\TypeEntity;
+		$published->setTitle('Published');
+
+		$article->setType($published);
+
+		$this->em->persist($article);
+		$this->em->persist($published);
+		$this->em->flush();
+
+		Assert::equal('author', $article->getPublishedBy());
+
+		$article->setType($draft);
+
+		$this->em->persist($article);
+		$this->em->flush();
+
+		Assert::equal('author', $article->getPublishedBy());
+
+		$this->listener->setUser('remover');
+
+		$deleted = new Models\TypeEntity;
+		$deleted->setTitle('Deleted');
+
+		$article->setType($deleted);
+
+		$this->em->persist($article);
+		$this->em->persist($deleted);
+		$this->em->flush();
+
+		Assert::equal('remover', $article->getPublishedBy());
 	}
 
 	private function generateDbSchema()
