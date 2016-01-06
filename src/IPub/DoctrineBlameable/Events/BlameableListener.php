@@ -202,9 +202,8 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 								} else {
 									$value = $changes[1];
 								}
-var_dump($options['value']);
-var_dump($value);
-								if (($singleField && in_array($value, $options['value'])) || $options['value'] === NULL) {
+
+								if (($singleField && in_array($value, (array) $options['value'])) || $options['value'] === NULL) {
 									$needChanges = TRUE;
 									$this->updateField($uow, $object, $classMetadata, $options['field']);
 								}

@@ -322,7 +322,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('author');
 
-		$article = new Models\ArticleEntity;
+		$article = new Models\ArticleMultiChangeEntity;
 
 		$this->em->persist($article);
 		$this->em->flush();
