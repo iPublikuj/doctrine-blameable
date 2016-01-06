@@ -112,13 +112,9 @@ class BlameableTest extends Tester\TestCase
 		$this->em->flush();
 		$this->em->clear();
 
-		Assert::equal($createdBy, $entity->getCreatedBy(), 'createdBy is constant');
+		Assert::equal($createdBy, $entity->getCreatedBy());
 		Assert::equal('secondUser', $entity->getUpdatedBy());
-		Assert::notEqual(
-			$entity->getCreatedBy(),
-			$entity->getUpdatedBy(),
-			'createBy and updatedBy have diverged since new update'
-		);
+		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
 	}
 
 	public function testRemove()
@@ -185,14 +181,27 @@ class BlameableTest extends Tester\TestCase
 		$this->em->flush();
 		$this->em->clear();
 
-		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity, 'createdBy is a user object');
-		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername(), 'createdBy is constant');
+		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity);
+		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername());
 		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
-		Assert::notEqual(
-			$entity->getCreatedBy(),
-			$entity->getUpdatedBy(),
-			'createBy and updatedBy have diverged since new update'
-		);
+		Assert::null($entity->getPublishedBy());
+		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
+
+		$published = new Models\TypeEntity;
+		$published->setTitle('Published');
+
+		$entity->setType($published);
+
+		$this->em->persist($entity);
+		$this->em->persist($published);
+		$this->em->flush();
+		$this->em->clear();
+
+		$id = $entity->getId();
+
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+
+		Assert::equal($tester->getUsername(), $entity->getPublishedBy()->getUsername());
 	}
 
 	/**
