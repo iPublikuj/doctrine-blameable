@@ -220,10 +220,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 			foreach(['update', 'create'] as $event) {
 				if (isset($config[$event])) {
 					foreach ($config[$event] as $field) {
-						$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
-						$newValue = $this->getUserValue($classMetadata, $field);
-
-						if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
+						if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
 							$this->updateField($uow, $entity, $classMetadata, $field);
 						}
 					}
