@@ -1,6 +1,6 @@
 <?php
 /**
- * TEntityEditor.php
+ * TEntityRemover.php
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
@@ -17,28 +17,28 @@ namespace IPub\DoctrineBlameable\Entities;
 use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 
 /**
- * Doctrine blameable editor entity
+ * Doctrine blameable remover entity
  *
  * @package        iPublikuj:DoctrinePhone!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-trait TEntityEditor
+trait TEntityRemover
 {
 	/**
 	 * @var mixed
 	 *
-	 * @IPub\Blameable(on="update")
+	 * @IPub\Blameable(on="create")
 	 */
-	protected $updatedBy;
+	protected $deletedBy;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setUpdatedBy($updatedBy)
+	public function setDeletedBy($deletedBy)
 	{
-		$this->updatedBy = $updatedBy;
+		$this->deletedBy = $deletedBy;
 
 		return $this;
 	}
@@ -46,8 +46,8 @@ trait TEntityEditor
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getUpdatedBy()
+	public function getDeletedBy()
 	{
-		return $this->updatedBy;
+		return $this->deletedBy;
 	}
 }

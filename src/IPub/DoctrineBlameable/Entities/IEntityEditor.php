@@ -25,14 +25,14 @@ namespace IPub\DoctrineBlameable\Entities;
 interface IEntityEditor
 {
 	/**
-	 * @param mixed $modifiedBy
+	 * @param mixed $updatedBy
 	 *
 	 * @return $this
 	 */
-	public function setModifiedBy($modifiedBy);
+	public function setUpdatedBy($updatedBy);
 
 	/**
 	 * @return mixed
 	 */
-	public function getModifiedBy();
+	public function getUpdatedBy();
 }

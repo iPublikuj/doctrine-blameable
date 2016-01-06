@@ -1,6 +1,6 @@
 <?php
 /**
- * TEntityEditor.php
+ * IEntityRemover.php
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
@@ -9,45 +9,30 @@
  * @subpackage     Entities
  * @since          1.0.0
  *
- * @date           29.01.14
+ * @date           07.01.16
  */
 
 namespace IPub\DoctrineBlameable\Entities;
 
-use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
-
 /**
- * Doctrine blameable editor entity
+ * Doctrine blameable remover entity interface
  *
  * @package        iPublikuj:DoctrinePhone!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-trait TEntityEditor
+interface IEntityRemover
 {
 	/**
-	 * @var mixed
+	 * @param mixed $deletedBy
 	 *
-	 * @IPub\Blameable(on="update")
+	 * @return $this
 	 */
-	protected $updatedBy;
+	function setDeletedBy($deletedBy);
 
 	/**
-	 * {@inheritdoc}
+	 * @return mixed
 	 */
-	public function setUpdatedBy($updatedBy)
-	{
-		$this->updatedBy = $updatedBy;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getUpdatedBy()
-	{
-		return $this->updatedBy;
-	}
+	function getDeletedBy();
 }

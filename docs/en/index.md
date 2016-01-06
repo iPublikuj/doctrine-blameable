@@ -441,7 +441,7 @@ class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,
 
     /**
      * Hook blameable behavior for entity editor
-     * updates modifiedBy field
+     * updates updatedBy field
      */
     use Entities\TEntityEditor;
 

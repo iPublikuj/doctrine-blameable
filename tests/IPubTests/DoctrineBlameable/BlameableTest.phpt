@@ -30,7 +30,7 @@ use IPub\DoctrineBlameable\Events;
 use IPub\DoctrineBlameable\Mapping;
 
 require __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/models/BlameableEntity.php';
+require_once __DIR__ . '/models/ArticleEntity.php';
 require_once __DIR__ . '/models/UserEntity.php';
 
 /**
@@ -79,13 +79,13 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('tester');
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
 
 		Assert::equal('tester', $entity->getCreatedBy());
-		Assert::equal('tester', $entity->getModifiedBy());
+		Assert::equal('tester', $entity->getUpdatedBy());
 	}
 
 	public function testUpdate()
@@ -94,7 +94,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('tester');
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
@@ -106,17 +106,17 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('secondUser');
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
 		$this->em->clear();
 
 		Assert::equal($createdBy, $entity->getCreatedBy(), 'createdBy is constant');
-		Assert::equal('secondUser', $entity->getModifiedBy());
+		Assert::equal('secondUser', $entity->getUpdatedBy());
 		Assert::notEqual(
 			$entity->getCreatedBy(),
-			$entity->getModifiedBy(),
+			$entity->getUpdatedBy(),
 			'createBy and updatedBy have diverged since new update'
 		);
 	}
@@ -125,7 +125,7 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
@@ -136,7 +136,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('secondUser');
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
 		$this->em->remove($entity);
 		$this->em->flush();
@@ -168,7 +168,7 @@ class BlameableTest extends Tester\TestCase
 		$this->em->persist($tester);
 		$this->em->flush();
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
@@ -179,7 +179,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser($tester); // Switch user for update
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\BlameableEntity')->find($id);
+		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
@@ -187,10 +187,10 @@ class BlameableTest extends Tester\TestCase
 
 		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity, 'createdBy is a user object');
 		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername(), 'createdBy is constant');
-		Assert::equal($tester->getUsername(), $entity->getModifiedBy()->getUsername());
+		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
 		Assert::notEqual(
 			$entity->getCreatedBy(),
-			$entity->getModifiedBy(),
+			$entity->getUpdatedBy(),
 			'createBy and updatedBy have diverged since new update'
 		);
 	}
@@ -219,7 +219,7 @@ class BlameableTest extends Tester\TestCase
 		$this->em->persist($user);
 		$this->em->flush();
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
@@ -237,10 +237,51 @@ class BlameableTest extends Tester\TestCase
 		// Override user
 		$this->listener->setUser($user);
 
-		$entity = new Models\BlameableEntity;
+		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
 		$this->em->flush();
+	}
+
+	public function testForcedValues()
+	{
+		$this->generateDbSchema();
+
+		$this->listener->setUser('tester');
+
+		$sport = new Models\ArticleEntity;
+		$sport->setTitle('sport forced');
+		$sport->setCreatedBy('myuser');
+		$sport->setUpdatedBy('myuser');
+
+		$this->em->persist($sport);
+		$this->em->flush();
+		$this->em->clear();
+
+		$id = $sport->getId();
+
+		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+
+		Assert::equal('myuser', $sport->getCreateBy());
+		Assert::equal('myuser', $sport->getUpdatedBy());
+		Assert::null($sport->getPublishedBy());
+
+		$published = new Models\TypeEntity;
+		$published->setTitle('Published');
+
+		$sport->setType($published);
+		$sport->setPublished('myuser');
+
+		$this->em->persist($sport);
+		$this->em->persist($published);
+		$this->em->flush();
+		$this->em->clear();
+
+		$id = $sport->getId();
+
+		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+
+		Assert::equal('myuser', $sport->getPublishedBy());
 	}
 
 	private function generateDbSchema()

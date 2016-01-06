@@ -10,7 +10,7 @@
  * @subpackage     Tests
  * @since          1.0.0
  *
- * @date           29.12.15
+ * @date           05.01.16
  */
 
 namespace IPubTests\DoctrineBlameable\Models;
@@ -23,10 +23,11 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
 /**
  * @ORM\Entity
  */
-class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
+class ArticleEntity implements Entities\IEntityAuthor, Entities\IEntityEditor, Entities\IEntityRemover
 {
 	use Entities\TEntityAuthor;
 	use Entities\TEntityEditor;
+	use Entities\TEntityRemover;
 
 	/**
 	 * @var int
@@ -43,11 +44,16 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	private $title;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="TypeEntity", inversedBy="articles")
+	 */
+	private $type;
+
+	/**
 	 * @var mixed
 	 *
-	 * @IPub\Blameable(on="delete")
+	 * @IPub\Blameable(on="change", field="type.title", value="Published")
 	 */
-	protected $deletedBy;
+	protected $publishedBy;
 
 	/**
 	 * @return int
@@ -74,18 +80,26 @@ class BlameableEntity implements Entities\IEntityAuthor, Entities\IEntityEditor
 	}
 
 	/**
-	 * @param mixed $deletedBy
+	 * @param TypeEntity $type
 	 */
-	public function setDeletedBy($deletedBy)
+	public function setType(TypeEntity $type)
 	{
-		$this->deletedBy = $deletedBy;
+		$this->type = $type;
+	}
+
+	/**
+	 * @param mixed $publishedBy
+	 */
+	public function setPublishedBy($publishedBy)
+	{
+		$this->publishedBy = $publishedBy;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getDeletedBy()
+	public function getPublishedBy()
 	{
-		return $this->deletedBy;
+		return $this->publishedBy;
 	}
 }
