@@ -329,7 +329,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleMultiChangeEntity')->find($id);
 
 		Assert::equal('author', $article->getCreatedBy());
 		Assert::equal('author', $article->getUpdatedBy());
