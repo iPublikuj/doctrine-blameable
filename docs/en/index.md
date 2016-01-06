@@ -28,9 +28,9 @@ If you map the blame onto a string field, this extension will try to assign the 
 
 #### Available options
 
-* **on**: main and required option which define event when a blame should be invoked. Allowed values are: **create**, **update**, **change** and **delete**.
-* **field**: is used only for event **change** and specifies tracked property. When the tracked property is changed, blame is invoked.
-* **value**: is used only for event change and with tracked field. When the value of tracked field is same as defined, blame is invoked.
+* **on**: main and required option which define event when a blame should be triggered. Allowed values are: **create**, **update**, **change** and **delete**.
+* **field**: is used only for event **change** and specifies tracked property. When the tracked property is changed, blame is triggered.
+* **value**: is used only for event change and with tracked field. When the value of tracked field is same as defined, blame is triggered.
 * **association**: is like in doctrine column definition. It support two sub-attributes: **column** which define column name in database and **referencedColumn** referenced column name in database
 
 ### Assigning user data to listener
@@ -435,13 +435,13 @@ use IPub\DoctrineBlameable\Entities;
 /**
  * @ORM\Entity
  */
-class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,, Entities\IEntityRemover
+class UsingTrait implements Entities\IEntityCreator, Entities\IEntityEditor, Entities\IEntityRemover
 {
     /**
      * Hook blameable behavior for entity author
      * updates createdBy field
      */
-    use Entities\TEntityAuthor;
+    use Entities\TEntityCreator;
 
     /**
      * Hook blameable behavior for entity editor
@@ -451,7 +451,7 @@ class UsingTrait implements Entities\IEntityAuthor, Entities\IEntityEditor,, Ent
 
     /**
      * Hook blameable behavior for entity deleter
-     * updates updatedBy field
+     * updates deletedBy field
      */
     use Entities\TEntityRemover;
 

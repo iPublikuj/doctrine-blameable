@@ -1,6 +1,6 @@
 <?php
 /**
- * IEntityAuthor.php
+ * IEntityCreator.php
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
@@ -22,7 +22,7 @@ namespace IPub\DoctrineBlameable\Entities;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IEntityAuthor
+interface IEntityCreator
 {
 	/**
 	 * @param mixed $createdBy

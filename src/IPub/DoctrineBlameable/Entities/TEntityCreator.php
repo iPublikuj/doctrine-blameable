@@ -1,6 +1,6 @@
 <?php
 /**
- * TEntityAuthor.php
+ * TEntityCreator.php
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
@@ -24,7 +24,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-trait TEntityAuthor
+trait TEntityCreator
 {
 	/**
 	 * @var mixed
