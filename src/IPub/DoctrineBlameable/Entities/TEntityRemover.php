@@ -29,7 +29,7 @@ trait TEntityRemover
 	/**
 	 * @var mixed
 	 *
-	 * @IPub\Blameable(on="create")
+	 * @IPub\Blameable(on="delete")
 	 */
 	protected $deletedBy;
 
