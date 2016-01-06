@@ -279,7 +279,7 @@ class BlameableTest extends Tester\TestCase
 		$published->setTitle('Published');
 
 		$sport->setType($published);
-		$sport->setPublished('forceduser');
+		$sport->setPublishedBy('forceduser');
 
 		$this->em->persist($sport);
 		$this->em->persist($published);

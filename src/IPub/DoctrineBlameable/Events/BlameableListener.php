@@ -194,7 +194,10 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
 				foreach ($config['update'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
+					$newValue = $this->getUserValue($classMetadata, $field);
+
+					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
@@ -202,7 +205,10 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 
 			if (isset($config['create'])) {
 				foreach ($config['create'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
+					$newValue = $this->getUserValue($classMetadata, $field);
+
+					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
@@ -223,7 +229,10 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
 				foreach ($config['update'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
+					$newValue = $this->getUserValue($classMetadata, $field);
+
+					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
@@ -244,7 +253,10 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['delete'])) {
 				foreach ($config['delete'] as $field) {
-					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
+					$newValue = $this->getUserValue($classMetadata, $field);
+
+					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
