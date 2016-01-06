@@ -122,6 +122,31 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 				$changeSet = $uow->getEntityChangeSet($object);
 				$needChanges = FALSE;
 
+				if ($uow->isScheduledForInsert($object) && isset($config['create'])) {
+					foreach ($config['create'] as $field) {
+						// Field can not exist in change set, when persisting embedded document without parent for example
+						$new = array_key_exists($field, $changeSet) ? $changeSet[$field][1] : FALSE;
+
+						if ($new === NULL) { // let manual values
+							$needChanges = TRUE;
+							$this->updateField($uow, $object, $classMetadata, $field);
+						}
+					}
+				}
+
+				if (isset($config['update'])) {
+					foreach ($config['update'] as $field) {
+						$isInsertAndNull = $uow->isScheduledForInsert($object)
+							&& array_key_exists($field, $changeSet)
+							&& $changeSet[$field][1] === NULL;
+
+						if (!isset($changeSet[$field]) || $isInsertAndNull) { // let manual values
+							$needChanges = TRUE;
+							$this->updateField($uow, $object, $classMetadata, $field);
+						}
+					}
+				}
+
 				if (isset($config['change'])) {
 					foreach ($config['change'] as $options) {
 						if (isset($changeSet[$options['field']])) {
@@ -192,24 +217,15 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		$classMetadata = $em->getClassMetadata(get_class($entity));
 
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
-			if (isset($config['update'])) {
-				foreach ($config['update'] as $field) {
-					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
-					$newValue = $this->getUserValue($classMetadata, $field);
+			foreach(['update', 'create'] as $event) {
+				if (isset($config[$event])) {
+					foreach ($config[$event] as $field) {
+						$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
+						$newValue = $this->getUserValue($classMetadata, $field);
 
-					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
-						$this->updateField($uow, $entity, $classMetadata, $field);
-					}
-				}
-			}
-
-			if (isset($config['create'])) {
-				foreach ($config['create'] as $field) {
-					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
-					$newValue = $this->getUserValue($classMetadata, $field);
-
-					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
-						$this->updateField($uow, $entity, $classMetadata, $field);
+						if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
+							$this->updateField($uow, $entity, $classMetadata, $field);
+						}
 					}
 				}
 			}
@@ -229,10 +245,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
 				foreach ($config['update'] as $field) {
-					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
-					$newValue = $this->getUserValue($classMetadata, $field);
-
-					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
@@ -253,10 +266,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['delete'])) {
 				foreach ($config['delete'] as $field) {
-					$currentValue = $classMetadata->getReflectionProperty($field)->getValue($entity);
-					$newValue = $this->getUserValue($classMetadata, $field);
-
-					if ($currentValue === NULL || $currentValue !== $newValue) { // let manual values
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
 						$this->updateField($uow, $entity, $classMetadata, $field);
 					}
 				}
