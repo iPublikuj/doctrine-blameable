@@ -320,19 +320,32 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 	{
 		foreach ($fields as $field) {
 			if ($classMetadata->getReflectionProperty($field)->getValue($object) === NULL) { // let manual values
-				$property = $classMetadata->getReflectionProperty($field);
-
-				$oldValue = $property->getValue($object);
-				$newValue = $this->getUserValue($classMetadata, $field);
-
-				$property->setValue($object, $newValue);
-
-				$uow->propertyChanged($object, $field, $oldValue, $newValue);
-				$uow->scheduleExtraUpdate($object, [
-					$field => [$oldValue, $newValue],
-				]);
+				$this->updateField($uow, $object, $classMetadata, $field);
 			}
 		}
+	}
+
+	/**
+	 * Updates a field
+	 *
+	 * @param ORM\UnitOfWork $uow
+	 * @param mixed $object
+	 * @param ORM\Mapping\ClassMetadata $classMetadata
+	 * @param string $field
+	 */
+	private function updateField(ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata, $field)
+	{
+		$property = $classMetadata->getReflectionProperty($field);
+
+		$oldValue = $property->getValue($object);
+		$newValue = $this->getUserValue($classMetadata, $field);
+
+		$property->setValue($object, $newValue);
+
+		$uow->propertyChanged($object, $field, $oldValue, $newValue);
+		$uow->scheduleExtraUpdate($object, [
+			$field => [$oldValue, $newValue],
+		]);
 	}
 
 	/**
