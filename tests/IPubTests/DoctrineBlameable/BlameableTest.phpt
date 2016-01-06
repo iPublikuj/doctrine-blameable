@@ -346,6 +346,8 @@ class BlameableTest extends Tester\TestCase
 
 		Assert::null($article->getPublishedBy());
 
+		$this->listener->setUser('editor');
+
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
 
@@ -355,14 +357,14 @@ class BlameableTest extends Tester\TestCase
 		$this->em->persist($published);
 		$this->em->flush();
 
-		Assert::equal('author', $article->getPublishedBy());
+		Assert::equal('editor', $article->getPublishedBy());
 
 		$article->setType($draft);
 
 		$this->em->persist($article);
 		$this->em->flush();
 
-		Assert::equal('author', $article->getPublishedBy());
+		Assert::equal('editor', $article->getPublishedBy());
 
 		$this->listener->setUser('remover');
 
