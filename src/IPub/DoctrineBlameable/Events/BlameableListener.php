@@ -37,7 +37,7 @@ use IPub\DoctrineBlameable\Mapping;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class BlameableListener extends Nette\Object implements Events\Subscriber
+final class BlameableListener extends Nette\Object implements Events\Subscriber
 {
 	/**
 	 * Define class name

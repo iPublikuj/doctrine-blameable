@@ -33,7 +33,7 @@ use IPub\DoctrineBlameable\Security;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class DoctrineBlameableExtension extends DI\CompilerExtension
+final class DoctrineBlameableExtension extends DI\CompilerExtension
 {
 	/**
 	 * @var array

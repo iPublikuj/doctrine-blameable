@@ -25,7 +25,7 @@ use Nette\Security as NS;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class UserCallable
+final class UserCallable
 {
 	/**
 	 * Define class name

@@ -26,7 +26,7 @@ use Nette\Http;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class Configuration extends Nette\Object
+final class Configuration extends Nette\Object
 {
 	/**
 	 * Flag if use lazy association or not
