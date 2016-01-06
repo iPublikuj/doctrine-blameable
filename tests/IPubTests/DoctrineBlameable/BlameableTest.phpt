@@ -148,41 +148,41 @@ class BlameableTest extends Tester\TestCase
 
 		$this->generateDbSchema();
 
-		$user = new Models\UserEntity;
-		$user->setUsername('user');
+		$creator = new Models\UserEntity;
+		$creator->setUsername('user');
 
 		$tester = new Models\UserEntity;
 		$tester->setUsername('tester');
 
-		$userCallback = function() use($user) {
-			return $user;
+		$userCallback = function() use($creator) {
+			return $creator;
 		};
 
 		$this->listener->setUserCallable($userCallback);
 
-		$this->em->persist($user);
+		$this->em->persist($creator);
 		$this->em->persist($tester);
+
 		$this->em->flush();
 
 		$entity = new Models\ArticleEntity;
 
 		$this->em->persist($entity);
+
 		$this->em->flush();
 
 		$id = $entity->getId();
 
-		$createdBy = $entity->getCreatedBy();
-
-		$this->listener->setUser($tester); // Switch user for update
+		// Switch user for update
+		$this->listener->setUser($tester);
 
 		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
-		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
+		$entity->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
-		$this->em->clear();
 
 		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity);
-		Assert::equal($createdBy->getUsername(), $entity->getCreatedBy()->getUsername());
+		Assert::equal($creator->getUsername(), $entity->getCreatedBy()->getUsername());
 		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
 		Assert::null($entity->getPublishedBy());
 		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
