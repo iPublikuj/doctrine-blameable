@@ -194,13 +194,17 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
 				foreach ($config['update'] as $field) {
-					$this->updateField($uow, $entity, $classMetadata, $field);
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+						$this->updateField($uow, $entity, $classMetadata, $field);
+					}
 				}
 			}
 
 			if (isset($config['create'])) {
 				foreach ($config['create'] as $field) {
-					$this->updateField($uow, $entity, $classMetadata, $field);
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+						$this->updateField($uow, $entity, $classMetadata, $field);
+					}
 				}
 			}
 		}
@@ -219,7 +223,9 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['update'])) {
 				foreach ($config['update'] as $field) {
-					$this->updateField($uow, $entity, $classMetadata, $field);
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+						$this->updateField($uow, $entity, $classMetadata, $field);
+					}
 				}
 			}
 		}
@@ -238,7 +244,9 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
 			if (isset($config['delete'])) {
 				foreach ($config['delete'] as $field) {
-					$this->updateField($uow, $entity, $classMetadata, $field);
+					if ($classMetadata->getReflectionProperty($field)->getValue($entity) === NULL) { // let manual values
+						$this->updateField($uow, $entity, $classMetadata, $field);
+					}
 				}
 			}
 		}

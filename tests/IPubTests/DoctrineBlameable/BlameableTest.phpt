@@ -260,8 +260,8 @@ class BlameableTest extends Tester\TestCase
 
 		$sport = new Models\ArticleEntity;
 		$sport->setTitle('sport forced');
-		$sport->setCreatedBy('myuser');
-		$sport->setUpdatedBy('myuser');
+		$sport->setCreatedBy('forceduser');
+		$sport->setUpdatedBy('forceduser');
 
 		$this->em->persist($sport);
 		$this->em->flush();
@@ -271,15 +271,15 @@ class BlameableTest extends Tester\TestCase
 
 		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('myuser', $sport->getCreatedBy());
-		Assert::equal('myuser', $sport->getUpdatedBy());
+		Assert::equal('forceduser', $sport->getCreatedBy());
+		Assert::equal('forceduser', $sport->getUpdatedBy());
 		Assert::null($sport->getPublishedBy());
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
 
 		$sport->setType($published);
-		$sport->setPublished('myuser');
+		$sport->setPublished('forceduser');
 
 		$this->em->persist($sport);
 		$this->em->persist($published);
@@ -290,7 +290,7 @@ class BlameableTest extends Tester\TestCase
 
 		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('myuser', $sport->getPublishedBy());
+		Assert::equal('forceduser', $sport->getPublishedBy());
 	}
 
 	private function generateDbSchema()
