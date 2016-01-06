@@ -96,11 +96,11 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 		$this->driver->loadMetadataForObjectClass($classMetadata);
 
 		// Register pre persist event
-		$this->registerEvent($classMetadata, ORM\Events::prePersist);
+		//$this->registerEvent($classMetadata, ORM\Events::prePersist);
 		// Register pre update event
-		$this->registerEvent($classMetadata, ORM\Events::preUpdate);
+		//$this->registerEvent($classMetadata, ORM\Events::preUpdate);
 		// Register pre remove event
-		$this->registerEvent($classMetadata, ORM\Events::preRemove);
+		//$this->registerEvent($classMetadata, ORM\Events::preRemove);
 	}
 
 	/**
@@ -141,6 +141,19 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 							&& $changeSet[$field][1] === NULL;
 
 						if (!isset($changeSet[$field]) || $isInsertAndNull) { // let manual values
+							$needChanges = TRUE;
+							$this->updateField($uow, $object, $classMetadata, $field);
+						}
+					}
+				}
+
+				if (isset($config['delete'])) {
+					foreach ($config['delete'] as $field) {
+						$isDeleteAndNull = $uow->isCollectionScheduledForDeletion($object)
+							&& array_key_exists($field, $changeSet)
+							&& $changeSet[$field][1] === NULL;
+
+						if (!isset($changeSet[$field]) || $isDeleteAndNull) { // let manual values
 							$needChanges = TRUE;
 							$this->updateField($uow, $object, $classMetadata, $field);
 						}
