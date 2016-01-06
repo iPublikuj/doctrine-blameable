@@ -79,13 +79,13 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('tester');
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->flush();
 
-		Assert::equal('tester', $entity->getCreatedBy());
-		Assert::equal('tester', $entity->getUpdatedBy());
+		Assert::equal('tester', $article->getCreatedBy());
+		Assert::equal('tester', $article->getUpdatedBy());
 	}
 
 	public function testUpdate()
@@ -94,68 +94,68 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('tester');
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->flush();
 
-		$id = $entity->getId();
-		$createdBy = $entity->getCreatedBy();
+		$id = $article->getId();
+		$createdBy = $article->getCreatedBy();
 
 		$this->em->clear();
 
 		$this->listener->setUser('secondUser');
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
-		$entity->setTitle('test'); // Need to modify at least one column to trigger onUpdate
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
 
-		Assert::equal($createdBy, $entity->getCreatedBy());
-		Assert::equal('secondUser', $entity->getUpdatedBy());
-		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
+		Assert::equal($createdBy, $article->getCreatedBy());
+		Assert::equal('secondUser', $article->getUpdatedBy());
+		Assert::notEqual($article->getCreatedBy(), $article->getUpdatedBy());
 
 		$this->listener->setUser('publisher');
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
 
-		$entity->setType($published);
+		$article->setType($published);
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->persist($published);
 		$this->em->flush();
 		$this->em->clear();
 
-		$id = $entity->getId();
+		$id = $article->getId();
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('publisher', $entity->getPublishedBy());
+		Assert::equal('publisher', $article->getPublishedBy());
 	}
 
 	public function testRemove()
 	{
 		$this->generateDbSchema();
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->flush();
 
-		$id = $entity->getId();
+		$id = $article->getId();
 
 		$this->em->clear();
 
 		$this->listener->setUser('secondUser');
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		$this->em->remove($entity);
+		$this->em->remove($article);
 		$this->em->flush();
 		$this->em->clear();
 
-		Assert::equal('secondUser', $entity->getDeletedBy());
+		Assert::equal('secondUser', $article->getDeletedBy());
 	}
 
 	public function testWithUserCallback()
@@ -182,43 +182,43 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->flush();
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 
 		$this->em->flush();
 
-		$id = $entity->getId();
+		$id = $article->getId();
 
 		// Switch user for update
 		$this->listener->setUser($tester);
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
-		$entity->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
 
-		Assert::true($entity->getCreatedBy() instanceof Models\UserEntity);
-		Assert::equal($creator->getUsername(), $entity->getCreatedBy()->getUsername());
-		Assert::equal($tester->getUsername(), $entity->getUpdatedBy()->getUsername());
-		Assert::null($entity->getPublishedBy());
-		Assert::notEqual($entity->getCreatedBy(), $entity->getUpdatedBy());
+		Assert::true($article->getCreatedBy() instanceof Models\UserEntity);
+		Assert::equal($creator->getUsername(), $article->getCreatedBy()->getUsername());
+		Assert::equal($tester->getUsername(), $article->getUpdatedBy()->getUsername());
+		Assert::null($article->getPublishedBy());
+		Assert::notEqual($article->getCreatedBy(), $article->getUpdatedBy());
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
 
-		$entity->setType($published);
+		$article->setType($published);
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->persist($published);
 		$this->em->flush();
 		$this->em->clear();
 
-		$id = $entity->getId();
+		$id = $article->getId();
 
-		$entity = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal($tester->getUsername(), $entity->getPublishedBy()->getUsername());
+		Assert::equal($tester->getUsername(), $article->getPublishedBy()->getUsername());
 	}
 
 	/**
@@ -245,9 +245,9 @@ class BlameableTest extends Tester\TestCase
 		$this->em->persist($user);
 		$this->em->flush();
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->flush();
 	}
 
@@ -267,9 +267,9 @@ class BlameableTest extends Tester\TestCase
 		// Override user
 		$this->listener->setUser($user);
 
-		$entity = new Models\ArticleEntity;
+		$article = new Models\ArticleEntity;
 
-		$this->em->persist($entity);
+		$this->em->persist($article);
 		$this->em->flush();
 	}
 
@@ -279,39 +279,39 @@ class BlameableTest extends Tester\TestCase
 
 		$this->listener->setUser('tester');
 
-		$sport = new Models\ArticleEntity;
-		$sport->setTitle('sport forced');
-		$sport->setCreatedBy('forceduser');
-		$sport->setUpdatedBy('forceduser');
+		$article = new Models\ArticleEntity;
+		$article->setTitle('Article forced');
+		$article->setCreatedBy('forcedUser');
+		$article->setUpdatedBy('forcedUser');
 
-		$this->em->persist($sport);
+		$this->em->persist($article);
 		$this->em->flush();
 		$this->em->clear();
 
-		$id = $sport->getId();
+		$id = $article->getId();
 
-		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('forceduser', $sport->getCreatedBy());
-		Assert::equal('forceduser', $sport->getUpdatedBy());
-		Assert::null($sport->getPublishedBy());
+		Assert::equal('forcedUser', $article->getCreatedBy());
+		Assert::equal('forcedUser', $article->getUpdatedBy());
+		Assert::null($article->getPublishedBy());
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
 
-		$sport->setType($published);
-		$sport->setPublishedBy('forceduser');
+		$article->setType($published);
+		$article->setPublishedBy('forcedUser');
 
-		$this->em->persist($sport);
+		$this->em->persist($article);
 		$this->em->persist($published);
 		$this->em->flush();
 		$this->em->clear();
 
-		$id = $sport->getId();
+		$id = $article->getId();
 
-		$sport = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
-		Assert::equal('forceduser', $sport->getPublishedBy());
+		Assert::equal('forcedUser', $article->getPublishedBy());
 	}
 
 	private function generateDbSchema()
