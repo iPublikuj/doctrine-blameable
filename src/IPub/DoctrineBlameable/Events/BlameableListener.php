@@ -149,7 +149,7 @@ class BlameableListener extends Nette\Object implements Events\Subscriber
 
 				if (isset($config['delete'])) {
 					foreach ($config['delete'] as $field) {
-						$isDeleteAndNull = $uow->isCollectionScheduledForDeletion($object)
+						$isDeleteAndNull = $uow->isScheduledForDelete($object)
 							&& array_key_exists($field, $changeSet)
 							&& $changeSet[$field][1] === NULL;
 
