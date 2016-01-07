@@ -210,16 +210,11 @@ final class Blameable extends Nette\Object
 					}
 				}
 
-				if ($metadata->hasField($field)) {
-					if (!$this->isValidField($metadata, $field) && $this->configuration->useLazyAssociation() === FALSE) {
-						throw new Exceptions\InvalidMappingException("Field - [{$field}] type is not valid and must be 'string' or a one-to-many relation in class - {$metadata->getName()}");
-					}
+				if ($metadata->hasField($field) && $this->isValidField($metadata, $field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
+					throw new Exceptions\InvalidMappingException("Field - [{$field}] type is not valid and must be 'string' or a one-to-many relation in class - {$metadata->getName()}");
 
-				} else if ($metadata->hasAssociation($field)) {
-					// association
-					if ($metadata->isSingleValuedAssociation($field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
-						throw new Exceptions\InvalidMappingException("Association - [{$field}] is not valid, it must be a one-to-many relation or a string field - {$metadata->getName()}");
-					}
+				} else if ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
+					throw new Exceptions\InvalidMappingException("Association - [{$field}] is not valid, it must be a one-to-many relation or a string field - {$metadata->getName()}");
 				}
 
 				// Check for valid events
@@ -243,7 +238,6 @@ final class Blameable extends Nette\Object
 					];
 				}
 
-				// properties are unique and mapper checks that, no risk here
 				$config[$blameable->on][] = $field;
 			}
 		}

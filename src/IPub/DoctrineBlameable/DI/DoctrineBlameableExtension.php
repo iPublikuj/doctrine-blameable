@@ -20,9 +20,11 @@ use Nette\Utils;
 use Nette\PhpGenerator as Code;
 
 use Kdyby;
-use Kdyby\Events;
+use Kdyby\Events as KdybyEvents;
 
 use IPub\DoctrineBlameable;
+use IPub\DoctrineBlameable\Events;
+use IPub\DoctrineBlameable\Mapping;
 use IPub\DoctrineBlameable\Security;
 
 /**
@@ -55,7 +57,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		Utils\Validators::assert($config['automapField'], 'bool', 'automapField');
 
 		$builder->addDefinition($this->prefix('configuration'))
-			->setClass('IPub\DoctrineBlameable\Configuration')
+			->setClass(DoctrineBlameable\Configuration::CLASS_NAME)
 			->setArguments([
 				$config['userEntity'],
 				$config['lazyAssociation'],
@@ -83,12 +85,12 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		}
 
 		$builder->addDefinition($this->prefix('driver'))
-			->setClass('IPub\DoctrineBlameable\Mapping\Driver\Blameable');
+			->setClass(Mapping\Driver\Blameable::CLASS_NAME);
 
 		$builder->addDefinition($this->prefix('listener'))
-			->setClass('IPub\DoctrineBlameable\Events\BlameableListener')
+			->setClass(Events\BlameableSubscriber::CLASS_NAME)
 			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL])
-			->addTag(Events\DI\EventsExtension::TAG_SUBSCRIBER);
+			->addTag(KdybyEvents\DI\EventsExtension::TAG_SUBSCRIBER);
 	}
 
 	/**

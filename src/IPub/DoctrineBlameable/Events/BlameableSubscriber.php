@@ -1,6 +1,6 @@
 <?php
 /**
- * BlameableListener.php
+ * BlameableSubscriber.php
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
@@ -30,14 +30,14 @@ use IPub\DoctrineBlameable\Exceptions;
 use IPub\DoctrineBlameable\Mapping;
 
 /**
- * Doctrine blameable listener
+ * Doctrine blameable subscriber
  *
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Events
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class BlameableListener extends Nette\Object implements Events\Subscriber
+final class BlameableSubscriber extends Nette\Object implements Events\Subscriber
 {
 	/**
 	 * Define class name
@@ -294,7 +294,7 @@ final class BlameableListener extends Nette\Object implements Events\Subscriber
 		}
 
 		if ($this->userCallable === NULL) {
-			return;
+			return NULL;
 		}
 
 		$callable = $this->userCallable;
