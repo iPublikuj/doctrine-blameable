@@ -41,7 +41,7 @@ class ExtensionTest extends Tester\TestCase
 
 		Assert::true($dic->getService('doctrineBlameable.configuration') instanceof DoctrineBlameable\Configuration);
 		Assert::true($dic->getService('doctrineBlameable.driver') instanceof DoctrineBlameable\Mapping\Driver\Blameable);
-		Assert::true($dic->getService('doctrineBlameable.listener') instanceof DoctrineBlameable\Events\BlameableListener);
+		Assert::true($dic->getService('doctrineBlameable.subscriber') instanceof DoctrineBlameable\Events\BlameableSubscriber);
 	}
 
 	/**
