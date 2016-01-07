@@ -56,9 +56,9 @@ class BlameableTest extends Tester\TestCase
 	private $em;
 
 	/**
-	 * @var Events\BlameableListener
+	 * @var Events\BlameableSubscriber
 	 */
-	private $listener;
+	private $subscriber;
 
 	/**
 	 * @var DoctrineBlameable\Configuration
@@ -71,7 +71,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->container = $this->createContainer();
 		$this->em = $this->container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->listener = $this->container->getByType('IPub\DoctrineBlameable\Events\BlameableListener');
+		$this->subscriber = $this->container->getByType('IPub\DoctrineBlameable\Events\BlameableSubscriber');
 		$this->configuration = $this->container->getByType('IPub\DoctrineBlameable\Configuration');
 	}
 
@@ -79,7 +79,7 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
-		$this->listener->setUser('tester');
+		$this->subscriber->setUser('tester');
 
 		$article = new Models\ArticleEntity;
 
@@ -94,7 +94,7 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
-		$this->listener->setUser('tester');
+		$this->subscriber->setUser('tester');
 
 		$article = new Models\ArticleEntity;
 
@@ -106,7 +106,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->clear();
 
-		$this->listener->setUser('secondUser');
+		$this->subscriber->setUser('secondUser');
 
 		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 		$article->setTitle('test'); // Need to modify at least one column to trigger onUpdate
@@ -117,7 +117,7 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('secondUser', $article->getUpdatedBy());
 		Assert::notEqual($article->getCreatedBy(), $article->getUpdatedBy());
 
-		$this->listener->setUser('publisher');
+		$this->subscriber->setUser('publisher');
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
@@ -149,7 +149,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->em->clear();
 
-		$this->listener->setUser('secondUser');
+		$this->subscriber->setUser('secondUser');
 
 		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 
@@ -177,7 +177,7 @@ class BlameableTest extends Tester\TestCase
 			return $creator;
 		};
 
-		$this->listener->setUserCallable($userCallback);
+		$this->subscriber->setUserCallable($userCallback);
 
 		$this->em->persist($creator);
 		$this->em->persist($tester);
@@ -193,7 +193,7 @@ class BlameableTest extends Tester\TestCase
 		$id = $article->getId();
 
 		// Switch user for update
-		$this->listener->setUser($tester);
+		$this->subscriber->setUser($tester);
 
 		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
 		$article->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
@@ -240,9 +240,9 @@ class BlameableTest extends Tester\TestCase
 			return $user;
 		};
 
-		$this->listener->setUserCallable($userCallback);
+		$this->subscriber->setUserCallable($userCallback);
 		// Override user
-		$this->listener->setUser('anonymous');
+		$this->subscriber->setUser('anonymous');
 
 		$this->em->persist($user);
 		$this->em->flush();
@@ -267,7 +267,7 @@ class BlameableTest extends Tester\TestCase
 		$this->em->flush();
 
 		// Override user
-		$this->listener->setUser($user);
+		$this->subscriber->setUser($user);
 
 		$article = new Models\ArticleEntity;
 
@@ -279,7 +279,7 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
-		$this->listener->setUser('tester');
+		$this->subscriber->setUser('tester');
 
 		$article = new Models\ArticleEntity;
 		$article->setTitle('Article forced');
@@ -320,7 +320,7 @@ class BlameableTest extends Tester\TestCase
 	{
 		$this->generateDbSchema();
 
-		$this->listener->setUser('author');
+		$this->subscriber->setUser('author');
 
 		$article = new Models\ArticleMultiChangeEntity;
 
@@ -346,7 +346,7 @@ class BlameableTest extends Tester\TestCase
 
 		Assert::null($article->getPublishedBy());
 
-		$this->listener->setUser('editor');
+		$this->subscriber->setUser('editor');
 
 		$published = new Models\TypeEntity;
 		$published->setTitle('Published');
@@ -366,7 +366,7 @@ class BlameableTest extends Tester\TestCase
 
 		Assert::equal('editor', $article->getPublishedBy());
 
-		$this->listener->setUser('remover');
+		$this->subscriber->setUser('remover');
 
 		$deleted = new Models\TypeEntity;
 		$deleted->setTitle('Deleted');

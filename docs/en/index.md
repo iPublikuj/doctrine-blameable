@@ -53,7 +53,7 @@ doctrineBlameable:
 ```
 
 ```php
-$blameableListener->setUser($yourUserDetails);
+$blameableSubscriber->setUser($yourUserDetails);
 ```
 
 But remember, if you are using string field association, provided value have to be string or have to implement ```__toString()``` method, and in case you are using reference association, value have to be instance of association entity.
