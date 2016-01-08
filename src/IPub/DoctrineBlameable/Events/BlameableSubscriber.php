@@ -21,9 +21,6 @@ use Doctrine;
 use Doctrine\Common;
 use Doctrine\ORM;
 
-use Kdyby;
-use Kdyby\Events;
-
 use IPub;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Exceptions;
@@ -37,7 +34,7 @@ use IPub\DoctrineBlameable\Mapping;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class BlameableSubscriber extends Nette\Object implements Events\Subscriber
+final class BlameableSubscriber extends Nette\Object implements Common\EventSubscriber
 {
 	/**
 	 * Define class name

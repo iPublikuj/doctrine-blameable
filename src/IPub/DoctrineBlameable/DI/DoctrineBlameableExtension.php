@@ -19,9 +19,6 @@ use Nette\DI;
 use Nette\Utils;
 use Nette\PhpGenerator as Code;
 
-use Kdyby;
-use Kdyby\Events as KdybyEvents;
-
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
 use IPub\DoctrineBlameable\Mapping;
@@ -89,8 +86,15 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder->addDefinition($this->prefix('subscriber'))
 			->setClass(Events\BlameableSubscriber::CLASS_NAME)
-			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL])
-			->addTag(KdybyEvents\DI\EventsExtension::TAG_SUBSCRIBER);
+			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL]);
+	}
+
+	public function beforeCompile()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface') ?: 'doctrine.default.entityManager')
+			->addSetup('?->getEventManager()->addEventSubscriber(?)', ['@self', $builder->getDefinition($this->prefix('subscriber'))]);
 	}
 
 	/**
