@@ -46,11 +46,6 @@ final class Blameable extends Nette\Object
 	const EXTENSION_ANNOTATION = 'IPub\DoctrineBlameable\Mapping\Annotation\Blameable';
 
 	/**
-	 * @var Common\Persistence\ObjectManager
-	 */
-	private $objectManager;
-
-	/**
 	 * @var DoctrineBlameable\Configuration
 	 */
 	private $configuration;
@@ -274,7 +269,7 @@ final class Blameable extends Nette\Object
 					$classMetadata = $metadataFactory->getMetadataFor($class);
 
 					// Re-generate metadata on cache miss
-					$this->loadMetadataForObjectClass($classMetadata);
+					$this->loadMetadataForObjectClass($objectManager, $classMetadata);
 
 					if (isset(self::$objectConfigurations[$class])) {
 						$config = self::$objectConfigurations[$class];
