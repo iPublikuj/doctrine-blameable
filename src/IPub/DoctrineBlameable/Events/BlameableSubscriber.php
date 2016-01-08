@@ -90,7 +90,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	{
 		/** @var ORM\Mapping\ClassMetadata $classMetadata */
 		$classMetadata = $eventArgs->getClassMetadata();
-		$this->driver->loadMetadataForObjectClass($classMetadata);
+		$this->driver->loadMetadataForObjectClass($eventArgs->getObjectManager(), $classMetadata);
 
 		// Register pre persist event
 		$this->registerEvent($classMetadata, ORM\Events::prePersist);
@@ -115,7 +115,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 			/** @var ORM\Mapping\ClassMetadata $classMetadata */
 			$classMetadata = $em->getClassMetadata(get_class($object));
 
-			if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
+			if ($config = $this->driver->getObjectConfigurations($em, $classMetadata->getName())) {
 				$changeSet = $uow->getEntityChangeSet($object);
 				$needChanges = FALSE;
 
@@ -226,7 +226,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 		$uow = $em->getUnitOfWork();
 		$classMetadata = $em->getClassMetadata(get_class($entity));
 
-		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
+		if ($config = $this->driver->getObjectConfigurations($em, $classMetadata->getName())) {
 			foreach(['update', 'create'] as $event) {
 				if (isset($config[$event])) {
 					$this->updateFields($config[$event], $uow, $entity, $classMetadata);
@@ -245,7 +245,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 		$uow = $em->getUnitOfWork();
 		$classMetadata = $em->getClassMetadata(get_class($entity));
 
-		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
+		if ($config = $this->driver->getObjectConfigurations($em, $classMetadata->getName())) {
 			if (isset($config['update'])) {
 				$this->updateFields($config['update'], $uow, $entity, $classMetadata);
 			}
@@ -262,7 +262,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 		$uow = $em->getUnitOfWork();
 		$classMetadata = $em->getClassMetadata(get_class($entity));
 
-		if ($config = $this->driver->getObjectConfigurations($classMetadata->getName())) {
+		if ($config = $this->driver->getObjectConfigurations($em, $classMetadata->getName())) {
 			if (isset($config['delete'])) {
 				$this->updateFields($config['delete'], $uow, $entity, $classMetadata);
 			}
