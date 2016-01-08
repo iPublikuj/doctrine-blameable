@@ -220,7 +220,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 */
-	public function prePersist($entity, Doctrine\ORM\Event\LifecycleEventArgs $eventArgs)
+	public function prePersist($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
@@ -239,7 +239,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 */
-	public function preUpdate($entity, Doctrine\ORM\Event\LifecycleEventArgs $eventArgs)
+	public function preUpdate($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
@@ -256,7 +256,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 */
-	public function preRemove($entity, Doctrine\ORM\Event\LifecycleEventArgs $eventArgs)
+	public function preRemove($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
