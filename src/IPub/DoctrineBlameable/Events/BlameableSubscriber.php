@@ -32,7 +32,7 @@ use IPub\DoctrineBlameable\Mapping;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Events
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class BlameableSubscriber extends Nette\Object implements Common\EventSubscriber
 {

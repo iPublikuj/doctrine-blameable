@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  * @since          1.0.0
@@ -30,7 +30,7 @@ use IPub\DoctrineBlameable\Security;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class DoctrineBlameableExtension extends DI\CompilerExtension
 {

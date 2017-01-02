@@ -20,7 +20,7 @@ namespace IPub\DoctrineBlameable\Entities;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 interface IEntityCreator
 {

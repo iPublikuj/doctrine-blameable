@@ -22,7 +22,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 trait TEntityCreator
 {

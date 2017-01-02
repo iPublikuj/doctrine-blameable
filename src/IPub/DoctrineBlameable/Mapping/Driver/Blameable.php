@@ -31,7 +31,7 @@ use IPub\DoctrineBlameable\Mapping;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Driver
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class Blameable extends Nette\Object
 {
@@ -176,11 +176,11 @@ final class Blameable extends Nette\Object
 							];
 
 							if (isset($blameable->association['column']) && $blameable->association['column'] !== NULL) {
-								$entityMap['joinColumns'][0]['name'] = $blameable->columnName;
+								$entityMap['joinColumns'][0]['name'] = $blameable->association['column'];
 							}
 
 							if (isset($blameable->association['referencedColumn']) && $blameable->association['referencedColumn'] !== NULL) {
-								$entityMap['joinColumns'][0]['referencedColumnName'] = $blameable->referencedColumnName;
+								$entityMap['joinColumns'][0]['referencedColumnName'] = $blameable->association['referencedColumn'];
 							}
 
 							$metadata->mapManyToOne($entityMap);
