@@ -13,6 +13,8 @@
  * @date           06.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPubTests\DoctrineBlameable;
 
 use Nette;
@@ -29,11 +31,11 @@ use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
 use IPub\DoctrineBlameable\Mapping;
 
-require __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/models/ArticleEntity.php';
-require_once __DIR__ . '/models/ArticleMultiChangeEntity.php';
-require_once __DIR__ . '/models/UserEntity.php';
-require_once __DIR__ . '/models/TypeEntity.php';
+require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require_once __DIR__ . DS . 'models' . DS . 'ArticleEntity.php';
+require_once __DIR__ . DS . 'models' . DS . 'ArticleMultiChangeEntity.php';
+require_once __DIR__ . DS . 'models' . DS . 'TypeEntity.php';
+require_once __DIR__ . DS . 'models' . DS . 'UserEntity.php';
 
 /**
  * Registering doctrine blameable functions tests
@@ -41,7 +43,7 @@ require_once __DIR__ . '/models/TypeEntity.php';
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Tests
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 class BlameableTest extends Tester\TestCase
 {
@@ -51,7 +53,7 @@ class BlameableTest extends Tester\TestCase
 	private $container;
 
 	/**
-	 * @var \Kdyby\Doctrine\EntityManager
+	 * @var ORM\EntityManager
 	 */
 	private $em;
 
@@ -380,6 +382,11 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('remover', $article->getPublishedBy());
 	}
 
+	/**
+	 * @return void
+	 *
+	 * @throws ORM\Tools\ToolsException
+	 */
 	private function generateDbSchema()
 	{
 		$schema = new ORM\Tools\SchemaTool($this->em);
@@ -389,18 +396,18 @@ class BlameableTest extends Tester\TestCase
 	/**
 	 * @return Nette\DI\Container
 	 */
-	protected function createContainer()
+	protected function createContainer() : Nette\DI\Container
 	{
 		$rootDir = __DIR__ . '/../../';
 
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 
-		$config->addParameters(['container' => ['class' => 'SystemContainer_' . md5('withModel')]]);
+		$config->addParameters(['container' => ['class' => 'SystemContainer_' . md5((string) time())]]);
 		$config->addParameters(['appDir' => $rootDir, 'wwwDir' => $rootDir]);
 
-		$config->addConfig(__DIR__ . '/files/config.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
-		$config->addConfig(__DIR__ . '/files/entities.neon', $config::NONE);
+		$config->addConfig(__DIR__ . DS . 'files' . DS . 'config.neon');
+		$config->addConfig(__DIR__ . DS . 'files' . DS . 'entities.neon');
 
 		DoctrineBlameable\DI\DoctrineBlameableExtension::register($config);
 

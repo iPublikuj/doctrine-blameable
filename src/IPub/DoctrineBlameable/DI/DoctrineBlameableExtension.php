@@ -4,13 +4,15 @@
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  * @since          1.0.0
  *
  * @date           01.01.16
  */
+
+declare(strict_types = 1);
 
 namespace IPub\DoctrineBlameable\DI;
 
@@ -30,7 +32,7 @@ use IPub\DoctrineBlameable\Security;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class DoctrineBlameableExtension extends DI\CompilerExtension
 {
@@ -41,9 +43,12 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		'lazyAssociation' => FALSE,
 		'userEntity'      => NULL,
 		'automapField'    => TRUE,
-		'userCallable'    => Security\UserCallable::CLASS_NAME,
+		'userCallable'    => Security\UserCallable::class,
 	];
 
+	/**
+	 * @return void
+	 */
 	public function loadConfiguration()
 	{
 		$config = $this->getConfig($this->defaults);
@@ -54,7 +59,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		Utils\Validators::assert($config['automapField'], 'bool', 'automapField');
 
 		$builder->addDefinition($this->prefix('configuration'))
-			->setClass(DoctrineBlameable\Configuration::CLASS_NAME)
+			->setClass(DoctrineBlameable\Configuration::class)
 			->setArguments([
 				$config['userEntity'],
 				$config['lazyAssociation'],
@@ -82,15 +87,20 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		}
 
 		$builder->addDefinition($this->prefix('driver'))
-			->setClass(Mapping\Driver\Blameable::CLASS_NAME);
+			->setClass(Mapping\Driver\Blameable::class);
 
 		$builder->addDefinition($this->prefix('subscriber'))
-			->setClass(Events\BlameableSubscriber::CLASS_NAME)
+			->setClass(Events\BlameableSubscriber::class)
 			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL]);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function beforeCompile()
 	{
+		parent::beforeCompile();
+
 		$builder = $this->getContainerBuilder();
 
 		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface') ?: 'doctrine.default.entityManager')
@@ -100,8 +110,10 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	/**
 	 * @param Nette\Configurator $config
 	 * @param string $extensionName
+	 *
+	 * @return void
 	 */
-	public static function register(Nette\Configurator $config, $extensionName = 'doctrineBlameable')
+	public static function register(Nette\Configurator $config, string $extensionName = 'doctrineBlameable')
 	{
 		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new DoctrineBlameableExtension);

@@ -12,6 +12,8 @@
  * @date           10.11.15
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Entities;
 
 /**
@@ -20,14 +22,12 @@ namespace IPub\DoctrineBlameable\Entities;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IEntityCreator
 {
 	/**
 	 * @param mixed $createdBy
-	 *
-	 * @return $this
 	 */
 	function setCreatedBy($createdBy);
 

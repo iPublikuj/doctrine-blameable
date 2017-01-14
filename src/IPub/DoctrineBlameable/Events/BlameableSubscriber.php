@@ -12,6 +12,8 @@
  * @date           01.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Events;
 
 use Nette;
@@ -32,15 +34,10 @@ use IPub\DoctrineBlameable\Mapping;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Events
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class BlameableSubscriber extends Nette\Object implements Common\EventSubscriber
 {
-	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
 	/**
 	 * @var callable
 	 */
@@ -61,11 +58,11 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 *
 	 * @return array
 	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents() : array
 	{
 		return [
-			'Doctrine\\ORM\\Event::loadClassMetadata',
-			'Doctrine\\ORM\\Event::onFlush',
+			ORM\Events::loadClassMetadata,
+			ORM\Events::onFlush,
 		];
 	}
 
@@ -83,6 +80,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 
 	/**
 	 * @param ORM\Event\LoadClassMetadataEventArgs $eventArgs
+	 *
+	 * @return void
 	 *
 	 * @throws Exceptions\InvalidMappingException
 	 */
@@ -102,6 +101,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 
 	/**
 	 * @param ORM\Event\OnFlushEventArgs $eventArgs
+	 *
+	 * @return void
 	 *
 	 * @throws Exceptions\UnexpectedValueException
 	 */
@@ -219,6 +220,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	/**
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
 	 */
 	public function prePersist($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
@@ -238,6 +241,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	/**
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
 	 */
 	public function preUpdate($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
@@ -255,6 +260,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	/**
 	 * @param mixed $entity
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
 	 */
 	public function preRemove($entity, ORM\Event\LifecycleEventArgs $eventArgs)
 	{
@@ -273,6 +280,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * Set a custom representation of current user
 	 *
 	 * @param mixed $user
+	 *
+	 * @return void
 	 */
 	public function setUser($user)
 	{
@@ -301,6 +310,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 
 	/**
 	 * @param callable $callable
+	 *
+	 * @return void
 	 */
 	public function setUserCallable(callable $callable)
 	{
@@ -312,6 +323,8 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param ORM\UnitOfWork $uow
 	 * @param mixed $object
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
+	 *
+	 * @return void
 	 */
 	private function updateFields(array $fields, ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata)
 	{
@@ -329,8 +342,10 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param mixed $object
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
 	 * @param string $field
+	 *
+	 * @return void
 	 */
-	private function updateField(ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata, $field)
+	private function updateField(ORM\UnitOfWork $uow, $object, ORM\Mapping\ClassMetadata $classMetadata, string $field)
 	{
 		$property = $classMetadata->getReflectionProperty($field);
 
@@ -353,7 +368,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 *
 	 * @return mixed
 	 */
-	private function getUserValue(ORM\Mapping\ClassMetadata $classMetadata, $field)
+	private function getUserValue(ORM\Mapping\ClassMetadata $classMetadata, string $field)
 	{
 		$user = $this->getUser();
 
@@ -381,9 +396,11 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
 	 * @param string $eventName
 	 *
+	 * @return void
+	 *
 	 * @throws ORM\Mapping\MappingException
 	 */
-	private function registerEvent(ORM\Mapping\ClassMetadata $classMetadata, $eventName)
+	private function registerEvent(ORM\Mapping\ClassMetadata $classMetadata, string $eventName)
 	{
 		if (!$this->hasRegisteredListener($classMetadata, $eventName, get_called_class())) {
 			$classMetadata->addEntityListener($eventName, get_called_class(), $eventName);
@@ -397,7 +414,7 @@ final class BlameableSubscriber extends Nette\Object implements Common\EventSubs
 	 *
 	 * @return bool
 	 */
-	private static function hasRegisteredListener(ORM\Mapping\ClassMetadata $classMetadata, $eventName, $listenerClass)
+	private static function hasRegisteredListener(ORM\Mapping\ClassMetadata $classMetadata, string $eventName, string $listenerClass) : bool 
 	{
 		if (!isset($classMetadata->entityListeners[$eventName])) {
 			return FALSE;

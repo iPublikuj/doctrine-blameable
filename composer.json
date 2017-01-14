@@ -4,7 +4,7 @@
 	"description"	: "Behavior for automate the update of username or user reference fields on your Entities.",
 	"keywords"		: ["nette", "blameable", "doctrine", "tools", "ipub", "ipublikuj"],
 	"homepage"		: "https://github.com/iPublikuj/doctrine-blameable",
-	"license"		: ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"license"		: ["GPL-2.0", "GPL-3.0"],
 
 	"authors": [
 		{
@@ -19,28 +19,38 @@
 		"issues"	:"https://github.com/iPublikuj/doctrine-blameable/issues"
 	},
 
+	"extra": {
+		"ipub"	: {
+			"configuration" : {
+				"extensions" : {
+					"doctrineBlameable" : "IPub\\DoctrineBlameable\\DI\\DoctrineBlameableExtension"
+				}
+			}
+		}
+	},
+
 	"require": {
-		"php"	: ">=5.4.0",
+		"php"	: ">=7.0.0",
 
-		"doctrine/orm"	: "~2.4",
+		"doctrine/orm"	: "~2.5",
 
-		"nette/di"			: "~2.2",
-		"nette/utils"		: "~2.2",
-		"nette/security"	: "~2.2",
-		"nette/http"		: "~2.2"
+		"nette/di"			: "~2.3",
+		"nette/utils"		: "~2.3",
+		"nette/reflection"	: "~2.3",
+
+		"pds/skeleton"	: "@dev"
 	},
 
 	"require-dev": {
-		"nette/bootstrap"		: "~2.2",
-		"nette/mail"			: "~2.2",
-		"nette/safe-stream"		: "~2.2",
-		"nette/robot-loader"	: "~2.2",
+		"nette/bootstrap"		: "~2.3",
+		"nette/mail"			: "~2.3",
+		"nette/safe-stream"		: "~2.3",
+		"nette/robot-loader"	: "~2.3",
 		"nette/tester"			: "@dev",
 
-		"kdyby/doctrine"		: "~3.0",
-		"kdyby/doctrine-cache"	: "~2.3",
+		"tracy/tracy"	: "@dev",
 
-		"tracy/tracy"	: "@dev"
+		"kdyby/doctrine"	: "~3.0"
 	},
 
 	"autoload": {

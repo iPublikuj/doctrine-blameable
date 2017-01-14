@@ -12,6 +12,8 @@
  * @date           02.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable;
 
 use Nette;
@@ -24,15 +26,10 @@ use Nette\Http;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class Configuration extends Nette\Object
 {
-	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
 	/**
 	 * Flag if use lazy association or not
 	 *
@@ -59,7 +56,7 @@ final class Configuration extends Nette\Object
 	 * @param bool $lazyAssociation
 	 * @param bool $automapField
 	 */
-	public function __construct($userEntity, $lazyAssociation = FALSE, $automapField = FALSE)
+	public function __construct(string $userEntity, bool $lazyAssociation = FALSE, bool $automapField = FALSE)
 	{
 		$this->userEntity = $userEntity;
 		$this->lazyAssociation = $lazyAssociation;
@@ -69,7 +66,7 @@ final class Configuration extends Nette\Object
 	/**
 	 * @return bool
 	 */
-	public function automapWithAssociation()
+	public function automapWithAssociation() : bool
 	{
 		if ($this->userEntity !== NULL && class_exists($this->userEntity) && $this->automapField === TRUE) {
 			return TRUE;
@@ -81,7 +78,7 @@ final class Configuration extends Nette\Object
 	/**
 	 * @return bool
 	 */
-	public function automapWithField()
+	public function automapWithField() : bool
 	{
 		if ($this->userEntity === NULL && $this->automapField === TRUE) {
 			return TRUE;
@@ -93,7 +90,7 @@ final class Configuration extends Nette\Object
 	/**
 	 * @return bool
 	 */
-	public function useLazyAssociation()
+	public function useLazyAssociation() : bool
 	{
 		return $this->lazyAssociation === TRUE;
 	}

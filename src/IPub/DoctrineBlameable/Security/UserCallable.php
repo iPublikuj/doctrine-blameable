@@ -12,6 +12,8 @@
  * @date           05.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Security;
 
 use Nette;
@@ -23,7 +25,7 @@ use Nette\Security as NS;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Security
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class UserCallable
 {
@@ -37,6 +39,9 @@ final class UserCallable
 	 */
 	private $user;
 
+	/**
+	 * @param NS\User $user
+	 */
 	public function __construct(NS\User $user)
 	{
 		$this->user = $user;

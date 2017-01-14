@@ -12,6 +12,8 @@
  * @date           05.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Mapping\Driver;
 
 use Nette;
@@ -31,7 +33,7 @@ use IPub\DoctrineBlameable\Mapping;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Driver
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class Blameable extends Nette\Object
 {
@@ -71,13 +73,16 @@ final class Blameable extends Nette\Object
 	/**
 	 * @param DoctrineBlameable\Configuration $configuration
 	 */
-	public function __construct(DoctrineBlameable\Configuration $configuration) {
+	public function __construct(DoctrineBlameable\Configuration $configuration)
+	{
 		$this->configuration = $configuration;
 	}
 
 	/**
 	 * @param Common\Persistence\ObjectManager $objectManager
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
+	 *
+	 * @return void
 	 */
 	public function loadMetadataForObjectClass(Common\Persistence\ObjectManager $objectManager, ORM\Mapping\ClassMetadata $classMetadata)
 	{
@@ -141,7 +146,7 @@ final class Blameable extends Nette\Object
 	 * @throws Exceptions\InvalidMappingException
 	 * @throws ORM\Mapping\MappingException
 	 */
-	private function readExtendedMetadata(ORM\Mapping\ClassMetadata $metadata, array $config)
+	private function readExtendedMetadata(ORM\Mapping\ClassMetadata $metadata, array $config) : array
 	{
 		$class = $metadata->getReflectionClass();
 
@@ -176,11 +181,11 @@ final class Blameable extends Nette\Object
 							];
 
 							if (isset($blameable->association['column']) && $blameable->association['column'] !== NULL) {
-								$entityMap['joinColumns'][0]['name'] = $blameable->association['column'];
+								$entityMap['joinColumns'][0]['name'] = $blameable->columnName;
 							}
 
 							if (isset($blameable->association['referencedColumn']) && $blameable->association['referencedColumn'] !== NULL) {
-								$entityMap['joinColumns'][0]['referencedColumnName'] = $blameable->association['referencedColumn'];
+								$entityMap['joinColumns'][0]['referencedColumnName'] = $blameable->referencedColumnName;
 							}
 
 							$metadata->mapManyToOne($entityMap);
@@ -245,7 +250,7 @@ final class Blameable extends Nette\Object
 	 *
 	 * @return array
 	 */
-	public function getObjectConfigurations(Common\Persistence\ObjectManager $objectManager, $class)
+	public function getObjectConfigurations(Common\Persistence\ObjectManager $objectManager, string $class) : array
 	{
 		$config = [];
 
@@ -290,9 +295,9 @@ final class Blameable extends Nette\Object
 	/**
 	 * Create default annotation reader for extensions
 	 *
-	 * @return Common\Annotations\AnnotationReader
+	 * @return Common\Annotations\CachedReader
 	 */
-	private function getDefaultAnnotationReader()
+	private function getDefaultAnnotationReader() : Common\Annotations\CachedReader
 	{
 		$reader = new Common\Annotations\AnnotationReader;
 
@@ -308,12 +313,12 @@ final class Blameable extends Nette\Object
 	/**
 	 * Checks if $field type is valid
 	 *
-	 * @param object $meta
+	 * @param ORM\Mapping\ClassMetadata $meta
 	 * @param string $field
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	private function isValidField($meta, $field)
+	private function isValidField(ORM\Mapping\ClassMetadata $meta, string $field) : bool
 	{
 		$mapping = $meta->getFieldMapping($field);
 
@@ -327,7 +332,7 @@ final class Blameable extends Nette\Object
 	 *
 	 * @return string
 	 */
-	private static function getCacheId($className)
+	private static function getCacheId(string $className) : string
 	{
 		return $className . '\\$' . strtoupper(str_replace('\\', '_', __NAMESPACE__)) . '_CLASSMETADATA';
 	}

@@ -12,6 +12,8 @@
  * @date           01.01.16
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Mapping\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
@@ -22,7 +24,7 @@ use Doctrine\Common\Annotations\Annotation;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Annotation
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @Annotation
  * @Target({"PROPERTY"})

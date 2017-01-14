@@ -12,6 +12,8 @@
  * @date           29.01.14
  */
 
+declare(strict_types = 1);
+
 namespace IPub\DoctrineBlameable\Entities;
 
 use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
@@ -22,7 +24,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 trait TEntityCreator
 {
