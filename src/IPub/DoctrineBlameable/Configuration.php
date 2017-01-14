@@ -40,7 +40,7 @@ final class Configuration extends Nette\Object
 	/**
 	 * User entity name
 	 *
-	 * @var string
+	 * @var string|NULL
 	 */
 	public $userEntity;
 
@@ -52,11 +52,11 @@ final class Configuration extends Nette\Object
 	public $automapField = TRUE;
 
 	/**
-	 * @param string $userEntity
+	 * @param string|NULL $userEntity
 	 * @param bool $lazyAssociation
 	 * @param bool $automapField
 	 */
-	public function __construct(string $userEntity, bool $lazyAssociation = FALSE, bool $automapField = FALSE)
+	public function __construct(string $userEntity = NULL, bool $lazyAssociation = FALSE, bool $automapField = FALSE)
 	{
 		$this->userEntity = $userEntity;
 		$this->lazyAssociation = $lazyAssociation;
