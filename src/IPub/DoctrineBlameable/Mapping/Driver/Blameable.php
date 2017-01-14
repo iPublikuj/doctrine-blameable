@@ -38,11 +38,6 @@ use IPub\DoctrineBlameable\Mapping;
 final class Blameable extends Nette\Object
 {
 	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
-	/**
 	 * Annotation field is blameable
 	 */
 	const EXTENSION_ANNOTATION = 'IPub\DoctrineBlameable\Mapping\Annotation\Blameable';

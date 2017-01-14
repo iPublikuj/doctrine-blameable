@@ -30,11 +30,6 @@ use Nette\Security as NS;
 final class UserCallable
 {
 	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
-	/**
 	 * @var NS\User
 	 */
 	private $user;
