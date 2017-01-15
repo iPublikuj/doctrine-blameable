@@ -67,6 +67,9 @@ class BlameableTest extends Tester\TestCase
 	 */
 	private $configuration;
 
+	/**
+	 * {@inheritdoc}
+	 */
 	protected function setUp()
 	{
 		parent::setUp();
@@ -384,8 +387,6 @@ class BlameableTest extends Tester\TestCase
 
 	/**
 	 * @return void
-	 *
-	 * @throws ORM\Tools\ToolsException
 	 */
 	private function generateDbSchema()
 	{
