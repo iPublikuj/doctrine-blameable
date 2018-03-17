@@ -41,7 +41,7 @@ class UserEntity
 	/**
 	 * @return string
 	 */
-	public function getUsername()
+	public function getUsername() : string
 	{
 		return $this->username;
 	}
@@ -49,7 +49,7 @@ class UserEntity
 	/**
 	 * @param string $username
 	 */
-	public function setUsername($username)
+	public function setUsername(string $username) : void
 	{
 		$this->username = $username;
 	}

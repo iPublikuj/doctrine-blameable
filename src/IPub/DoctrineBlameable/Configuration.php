@@ -17,7 +17,6 @@ declare(strict_types = 1);
 namespace IPub\DoctrineBlameable;
 
 use Nette;
-use Nette\Http;
 
 /**
  * Doctrine blameable extension configuration storage
@@ -26,10 +25,15 @@ use Nette\Http;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
-final class Configuration extends Nette\Object
+final class Configuration
 {
+	/**
+	 * Implement nette smart magic
+	 */
+	use Nette\SmartObject;
+
 	/**
 	 * Flag if use lazy association or not
 	 *

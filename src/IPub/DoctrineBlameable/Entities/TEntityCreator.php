@@ -24,7 +24,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 trait TEntityCreator
 {
@@ -37,8 +37,10 @@ trait TEntityCreator
 
 	/**
 	 * @param mixed $createdBy
+	 *
+	 * @return void
 	 */
-	public function setCreatedBy($createdBy)
+	public function setCreatedBy($createdBy) : void
 	{
 		$this->createdBy = $createdBy;
 	}

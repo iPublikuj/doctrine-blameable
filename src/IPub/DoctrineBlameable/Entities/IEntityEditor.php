@@ -22,14 +22,14 @@ namespace IPub\DoctrineBlameable\Entities;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 interface IEntityEditor
 {
 	/**
 	 * @param mixed $updatedBy
 	 */
-	function setUpdatedBy($updatedBy);
+	function setUpdatedBy($updatedBy) : void;
 
 	/**
 	 * @return mixed

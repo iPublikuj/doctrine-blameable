@@ -33,14 +33,19 @@ use IPub\DoctrineBlameable\Mapping;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Driver
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
-final class Blameable extends Nette\Object
+final class Blameable
 {
+	/**
+	 * Implement nette smart magic
+	 */
+	use Nette\SmartObject;
+
 	/**
 	 * Annotation field is blameable
 	 */
-	const EXTENSION_ANNOTATION = 'IPub\DoctrineBlameable\Mapping\Annotation\Blameable';
+	private const EXTENSION_ANNOTATION = 'IPub\DoctrineBlameable\Mapping\Annotation\Blameable';
 
 	/**
 	 * @var DoctrineBlameable\Configuration
@@ -79,7 +84,7 @@ final class Blameable extends Nette\Object
 	 *
 	 * @return void
 	 */
-	public function loadMetadataForObjectClass(Common\Persistence\ObjectManager $objectManager, ORM\Mapping\ClassMetadata $classMetadata)
+	public function loadMetadataForObjectClass(Common\Persistence\ObjectManager $objectManager, ORM\Mapping\ClassMetadata $classMetadata) : void
 	{
 		if ($classMetadata->isMappedSuperclass) {
 			return; // Ignore mappedSuperclasses for now
@@ -254,7 +259,7 @@ final class Blameable extends Nette\Object
 
 		} else {
 			$metadataFactory = $objectManager->getMetadataFactory();
-			/** @var Common\Cache\Cache $cacheDriver|NULL */
+			/** @var Common\Cache\Cache $cacheDriver |NULL */
 			$cacheDriver = $metadataFactory->getCacheDriver();
 
 			if ($cacheDriver !== NULL) {

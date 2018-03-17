@@ -22,14 +22,14 @@ namespace IPub\DoctrineBlameable\Entities;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 interface IEntityRemover
 {
 	/**
 	 * @param mixed $deletedBy
 	 */
-	function setDeletedBy($deletedBy);
+	function setDeletedBy($deletedBy) : void;
 
 	/**
 	 * @return mixed

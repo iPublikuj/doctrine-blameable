@@ -60,7 +60,7 @@ class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, 
 	/**
 	 * @return int
 	 */
-	public function getId()
+	public function getId() : int
 	{
 		return $this->id;
 	}
@@ -68,7 +68,7 @@ class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, 
 	/**
 	 * @return string
 	 */
-	public function getTitle()
+	public function getTitle() : string
 	{
 		return $this->title;
 	}
@@ -76,7 +76,7 @@ class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, 
 	/**
 	 * @param string $title
 	 */
-	public function setTitle($title)
+	public function setTitle(string $title) : void
 	{
 		$this->title = $title;
 	}
@@ -84,7 +84,7 @@ class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, 
 	/**
 	 * @param TypeEntity $type
 	 */
-	public function setType(TypeEntity $type)
+	public function setType(TypeEntity $type) : void
 	{
 		$this->type = $type;
 	}
@@ -92,7 +92,7 @@ class ArticleEntity implements Entities\IEntityCreator, Entities\IEntityEditor, 
 	/**
 	 * @param mixed $publishedBy
 	 */
-	public function setPublishedBy($publishedBy)
+	public function setPublishedBy($publishedBy) : void
 	{
 		$this->publishedBy = $publishedBy;
 	}

@@ -6,7 +6,6 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/ipub/doctrine-blameable.svg?style=flat-square)](https://packagist.org/packages/ipub/doctrine-blameable)
 [![Composer Downloads](https://img.shields.io/packagist/dt/ipub/doctrine-blameable.svg?style=flat-square)](https://packagist.org/packages/ipub/doctrine-blameable)
 [![License](https://img.shields.io/packagist/l/ipub/doctrine-blameable.svg?style=flat-square)](https://packagist.org/packages/ipub/doctrine-blameable)
-[![Dependency Status](https://img.shields.io/versioneye/d/user/projects/568ae065eb4f47003c00103e.svg?style=flat-square)](https://www.versioneye.com/user/projects/568ae065eb4f47003c00103e)
 
 Blameable behavior will automate the update of username or user reference fields on your Entities in [Nette Framework](http://nette.org/) and [Doctrine 2](http://www.doctrine-project.org/)
 

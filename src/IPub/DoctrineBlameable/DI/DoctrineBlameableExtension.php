@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        http://www.ipublikuj.eu
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  * @since          1.0.0
@@ -32,7 +32,7 @@ use IPub\DoctrineBlameable\Security;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     DI
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class DoctrineBlameableExtension extends DI\CompilerExtension
 {
@@ -49,7 +49,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	/**
 	 * @return void
 	 */
-	public function loadConfiguration()
+	public function loadConfiguration() : void
 	{
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
@@ -97,7 +97,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	/**
 	 * {@inheritdoc}
 	 */
-	public function beforeCompile()
+	public function beforeCompile() : void
 	{
 		parent::beforeCompile();
 
@@ -113,7 +113,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	 *
 	 * @return void
 	 */
-	public static function register(Nette\Configurator $config, string $extensionName = 'doctrineBlameable')
+	public static function register(Nette\Configurator $config, string $extensionName = 'doctrineBlameable') : void
 	{
 		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new DoctrineBlameableExtension);

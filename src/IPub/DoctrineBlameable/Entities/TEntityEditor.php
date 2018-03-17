@@ -24,7 +24,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 trait TEntityEditor
 {
@@ -37,8 +37,10 @@ trait TEntityEditor
 
 	/**
 	 * @param mixed $updatedBy
+	 *
+	 * @return void
 	 */
-	public function setUpdatedBy($updatedBy)
+	public function setUpdatedBy($updatedBy) : void
 	{
 		$this->updatedBy = $updatedBy;
 	}

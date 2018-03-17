@@ -24,7 +24,7 @@ use IPub\DoctrineBlameable\Mapping\Annotation as IPub;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Entities
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 trait TEntityRemover
 {
@@ -37,8 +37,10 @@ trait TEntityRemover
 
 	/**
 	 * @param mixed $deletedBy
+	 *
+	 * @return void
 	 */
-	public function setDeletedBy($deletedBy)
+	public function setDeletedBy($deletedBy) : void
 	{
 		$this->deletedBy = $deletedBy;
 	}

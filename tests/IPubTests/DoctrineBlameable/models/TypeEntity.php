@@ -45,7 +45,7 @@ class TypeEntity
 	/**
 	 * @return int
 	 */
-	public function getId()
+	public function getId() : int
 	{
 		return $this->id;
 	}
@@ -53,7 +53,7 @@ class TypeEntity
 	/**
 	 * @param string $title
 	 */
-	public function setTitle($title)
+	public function setTitle(string $title) : void
 	{
 		$this->title = $title;
 	}
@@ -61,7 +61,7 @@ class TypeEntity
 	/**
 	 * @return string
 	 */
-	public function getTitle()
+	public function getTitle() : string
 	{
 		return $this->title;
 	}

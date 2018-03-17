@@ -26,7 +26,6 @@ use Doctrine;
 use Doctrine\ORM;
 use Doctrine\Common;
 
-use IPub;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
 use IPub\DoctrineBlameable\Mapping;
@@ -43,7 +42,7 @@ require_once __DIR__ . DS . 'models' . DS . 'UserEntity.php';
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Tests
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 class BlameableTest extends Tester\TestCase
 {
@@ -70,7 +69,7 @@ class BlameableTest extends Tester\TestCase
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function setUp()
+	protected function setUp() : void
 	{
 		parent::setUp();
 
@@ -80,7 +79,7 @@ class BlameableTest extends Tester\TestCase
 		$this->configuration = $this->container->getByType('IPub\DoctrineBlameable\Configuration');
 	}
 
-	public function testCreate()
+	public function testCreate() : void
 	{
 		$this->generateDbSchema();
 
@@ -95,7 +94,7 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('tester', $article->getUpdatedBy());
 	}
 
-	public function testUpdate()
+	public function testUpdate() : void
 	{
 		$this->generateDbSchema();
 
@@ -113,7 +112,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->subscriber->setUser('secondUser');
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 		$article->setTitle('test'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
@@ -136,12 +135,12 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 
 		Assert::equal('publisher', $article->getPublishedBy());
 	}
 
-	public function testRemove()
+	public function testRemove() : void
 	{
 		$this->generateDbSchema();
 
@@ -156,7 +155,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->subscriber->setUser('secondUser');
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 
 		$this->em->remove($article);
 		$this->em->flush();
@@ -165,7 +164,7 @@ class BlameableTest extends Tester\TestCase
 		Assert::equal('secondUser', $article->getDeletedBy());
 	}
 
-	public function testWithUserCallback()
+	public function testWithUserCallback() : void
 	{
 		// Define entity name
 		$this->configuration->userEntity = 'IPubTests\DoctrineBlameable\Models\UserEntity';
@@ -200,7 +199,7 @@ class BlameableTest extends Tester\TestCase
 		// Switch user for update
 		$this->subscriber->setUser($tester);
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 		$article->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
@@ -223,7 +222,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 
 		Assert::equal($tester->getUsername(), $article->getPublishedBy()->getUsername());
 	}
@@ -231,10 +230,10 @@ class BlameableTest extends Tester\TestCase
 	/**
 	 * @throws \IPub\DoctrineBlameable\Exceptions\InvalidArgumentException
 	 */
-	public function testPersistOnlyWithEntity()
+	public function testPersistOnlyWithEntity() : void
 	{
 		// Define entity name
-		$this->configuration->userEntity = 'IPubTests\DoctrineBlameable\Models\UserEntity';
+		$this->configuration->userEntity = Models\UserEntity::class;
 
 		$this->generateDbSchema();
 
@@ -261,7 +260,7 @@ class BlameableTest extends Tester\TestCase
 	/**
 	 * @throws \IPub\DoctrineBlameable\Exceptions\InvalidArgumentException
 	 */
-	public function testPersistOnlyWithString()
+	public function testPersistOnlyWithString() : void
 	{
 		$this->generateDbSchema();
 
@@ -280,7 +279,7 @@ class BlameableTest extends Tester\TestCase
 		$this->em->flush();
 	}
 
-	public function testForcedValues()
+	public function testForcedValues() : void
 	{
 		$this->generateDbSchema();
 
@@ -297,7 +296,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 
 		Assert::equal('forcedUser', $article->getCreatedBy());
 		Assert::equal('forcedUser', $article->getUpdatedBy());
@@ -316,12 +315,12 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
 
 		Assert::equal('forcedUser', $article->getPublishedBy());
 	}
 
-	public function testMultipleValueTrackingField()
+	public function testMultipleValueTrackingField() : void
 	{
 		$this->generateDbSchema();
 
@@ -334,7 +333,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository('IPubTests\DoctrineBlameable\Models\ArticleMultiChangeEntity')->find($id);
+		$article = $this->em->getRepository(Models\ArticleMultiChangeEntity::class)->find($id);
 
 		Assert::equal('author', $article->getCreatedBy());
 		Assert::equal('author', $article->getUpdatedBy());
@@ -388,7 +387,7 @@ class BlameableTest extends Tester\TestCase
 	/**
 	 * @return void
 	 */
-	private function generateDbSchema()
+	private function generateDbSchema() : void
 	{
 		$schema = new ORM\Tools\SchemaTool($this->em);
 		$schema->createSchema($this->em->getMetadataFactory()->getAllMetadata());

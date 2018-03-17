@@ -16,7 +16,6 @@ declare(strict_types = 1);
 
 namespace IPub\DoctrineBlameable\Security;
 
-use Nette;
 use Nette\Security as NS;
 
 /**
@@ -25,7 +24,7 @@ use Nette\Security as NS;
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Security
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class UserCallable
 {

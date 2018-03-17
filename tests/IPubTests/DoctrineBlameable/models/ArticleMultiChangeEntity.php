@@ -60,7 +60,7 @@ class ArticleMultiChangeEntity implements Entities\IEntityCreator, Entities\IEnt
 	/**
 	 * @return int
 	 */
-	public function getId()
+	public function getId() : int
 	{
 		return $this->id;
 	}
@@ -68,7 +68,7 @@ class ArticleMultiChangeEntity implements Entities\IEntityCreator, Entities\IEnt
 	/**
 	 * @return string
 	 */
-	public function getTitle()
+	public function getTitle() : string
 	{
 		return $this->title;
 	}
@@ -76,7 +76,7 @@ class ArticleMultiChangeEntity implements Entities\IEntityCreator, Entities\IEnt
 	/**
 	 * @param string $title
 	 */
-	public function setTitle($title)
+	public function setTitle(string $title) : void
 	{
 		$this->title = $title;
 	}
@@ -84,7 +84,7 @@ class ArticleMultiChangeEntity implements Entities\IEntityCreator, Entities\IEnt
 	/**
 	 * @param TypeEntity $type
 	 */
-	public function setType(TypeEntity $type)
+	public function setType(TypeEntity $type) : void
 	{
 		$this->type = $type;
 	}
@@ -92,7 +92,7 @@ class ArticleMultiChangeEntity implements Entities\IEntityCreator, Entities\IEnt
 	/**
 	 * @param mixed $publishedBy
 	 */
-	public function setPublishedBy($publishedBy)
+	public function setPublishedBy($publishedBy) : void
 	{
 		$this->publishedBy = $publishedBy;
 	}
