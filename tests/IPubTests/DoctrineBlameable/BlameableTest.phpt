@@ -135,7 +135,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 
 		Assert::equal('publisher', $article->getPublishedBy());
 	}
@@ -155,7 +155,7 @@ class BlameableTest extends Tester\TestCase
 
 		$this->subscriber->setUser('secondUser');
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 
 		$this->em->remove($article);
 		$this->em->flush();
@@ -199,7 +199,7 @@ class BlameableTest extends Tester\TestCase
 		// Switch user for update
 		$this->subscriber->setUser($tester);
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 		$article->setTitle('New article title'); // Need to modify at least one column to trigger onUpdate
 
 		$this->em->flush();
@@ -222,7 +222,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 
 		Assert::equal($tester->getUsername(), $article->getPublishedBy()->getUsername());
 	}
@@ -296,7 +296,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 
 		Assert::equal('forcedUser', $article->getCreatedBy());
 		Assert::equal('forcedUser', $article->getUpdatedBy());
@@ -315,7 +315,7 @@ class BlameableTest extends Tester\TestCase
 
 		$id = $article->getId();
 
-		$article = $this->em->getRepository(Models\ArticleEntity)->find($id);
+		$article = $this->em->getRepository(Models\ArticleEntity::class)->find($id);
 
 		Assert::equal('forcedUser', $article->getPublishedBy());
 	}
