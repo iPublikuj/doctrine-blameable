@@ -59,7 +59,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		Utils\Validators::assert($config['automapField'], 'bool', 'automapField');
 
 		$builder->addDefinition($this->prefix('configuration'))
-			->setClass(DoctrineBlameable\Configuration::class)
+			->setType(DoctrineBlameable\Configuration::class)
 			->setArguments([
 				$config['userEntity'],
 				$config['lazyAssociation'],
@@ -80,18 +80,18 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			list($resolverClass) = (array) $builder->normalizeEntity($definition->getFactory()->getEntity());
 
 			if (class_exists($resolverClass)) {
-				$definition->setClass($resolverClass);
+				$definition->setType($resolverClass);
 			}
 
 			$userCallable = $definition;
 		}
 
 		$builder->addDefinition($this->prefix('driver'))
-			->setClass(Mapping\Driver\Blameable::class);
+			->setType(Mapping\Driver\Blameable::class);
 
 		$builder->addDefinition($this->prefix('subscriber'))
-			->setClass(Events\BlameableSubscriber::class)
-			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getClass() : NULL]);
+			->setType(Events\BlameableSubscriber::class)
+			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getType() : NULL]);
 	}
 
 	/**
