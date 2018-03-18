@@ -21,7 +21,6 @@ use Nette;
 use Doctrine\Common;
 use Doctrine\ORM;
 
-use IPub;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Exceptions;
 use IPub\DoctrineBlameable\Mapping;
