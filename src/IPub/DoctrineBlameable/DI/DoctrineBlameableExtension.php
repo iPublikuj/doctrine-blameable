@@ -19,7 +19,6 @@ namespace IPub\DoctrineBlameable\DI;
 use Nette;
 use Nette\DI;
 use Nette\Utils;
-use Nette\PhpGenerator as Code;
 
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
@@ -48,6 +47,8 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 	/**
 	 * @return void
+	 *
+	 * @throws Utils\AssertionException
 	 */
 	public function loadConfiguration() : void
 	{
@@ -71,7 +72,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		if ($config['userCallable'] !== NULL) {
 			$definition = $builder->addDefinition($this->prefix(md5($config['userCallable'])));
 
-			list($factory) = DI\Compiler::filterArguments([
+			list($factory) = DI\Helpers::filterArguments([
 				is_string($config['userCallable']) ? new DI\Statement($config['userCallable']) : $config['userCallable']
 			]);
 

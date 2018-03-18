@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        https://www.ipublikuj.eu
- * @author         Adam Kadlec https://www.ipublikuj.eu
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Driver
  * @since          1.0.0
@@ -18,7 +18,6 @@ namespace IPub\DoctrineBlameable\Mapping\Driver;
 
 use Nette;
 
-use Doctrine;
 use Doctrine\Common;
 use Doctrine\ORM;
 
@@ -83,6 +82,8 @@ final class Blameable
 	 * @param ORM\Mapping\ClassMetadata $classMetadata
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function loadMetadataForObjectClass(Common\Persistence\ObjectManager $objectManager, ORM\Mapping\ClassMetadata $classMetadata) : void
 	{
@@ -143,7 +144,7 @@ final class Blameable
 	 *
 	 * @return array
 	 *
-	 * @throws Exceptions\InvalidMappingException
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	private function readExtendedMetadata(ORM\Mapping\ClassMetadata $metadata, array $config) : array
@@ -249,6 +250,8 @@ final class Blameable
 	 * @param string $class
 	 *
 	 * @return array
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function getObjectConfigurations(Common\Persistence\ObjectManager $objectManager, string $class) : array
 	{
@@ -296,6 +299,8 @@ final class Blameable
 	 * Create default annotation reader for extensions
 	 *
 	 * @return Common\Annotations\CachedReader
+	 *
+	 * @throws Common\Annotations\AnnotationException
 	 */
 	private function getDefaultAnnotationReader() : Common\Annotations\CachedReader
 	{
@@ -317,6 +322,8 @@ final class Blameable
 	 * @param string $field
 	 *
 	 * @return bool
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	private function isValidField(ORM\Mapping\ClassMetadata $meta, string $field) : bool
 	{

@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        https://www.ipublikuj.eu
- * @author         Adam Kadlec https://www.ipublikuj.eu
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:DoctrineBlameable!
  * @subpackage     Events
  * @since          1.0.0
@@ -17,13 +17,10 @@ declare(strict_types = 1);
 namespace IPub\DoctrineBlameable\Events;
 
 use Nette;
-use Nette\Utils;
 
-use Doctrine;
 use Doctrine\Common;
 use Doctrine\ORM;
 
-use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Exceptions;
 use IPub\DoctrineBlameable\Mapping;
 
@@ -87,7 +84,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
-	 * @throws Exceptions\InvalidMappingException
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function loadClassMetadata(ORM\Event\LoadClassMetadataEventArgs $eventArgs) : void
 	{
@@ -108,7 +105,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
-	 * @throws Exceptions\UnexpectedValueException
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs) : void
 	{
@@ -226,6 +223,8 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function prePersist($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
 	{
@@ -247,6 +246,8 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function preUpdate($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
 	{
@@ -266,6 +267,8 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 * @param ORM\Event\LifecycleEventArgs $eventArgs
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\Mapping\MappingException
 	 */
 	public function preRemove($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
 	{
