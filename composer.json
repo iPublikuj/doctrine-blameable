@@ -57,6 +57,8 @@
     "nette/robot-loader" : "~2.4 || ~3.0",
     "nette/safe-stream" : "~2.3",
     "nette/tester" : "~2.3",
+
+    "nette/security" : "~2.4",
     "nette/http" : "~2.4",
 
     "tracy/tracy" : "~2.4",
