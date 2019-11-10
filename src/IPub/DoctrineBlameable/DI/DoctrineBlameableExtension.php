@@ -52,33 +52,39 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	 */
 	public function loadConfiguration() : void
 	{
-		$config = $this->getConfig($this->defaults);
+		// Get container builder
 		$builder = $this->getContainerBuilder();
 
-		Utils\Validators::assert($config['userEntity'], 'type|null', 'userEntity');
-		Utils\Validators::assert($config['lazyAssociation'], 'bool', 'lazyAssociation');
-		Utils\Validators::assert($config['automapField'], 'bool', 'automapField');
+		// Merge extension default config
+		$this->setConfig(DI\Config\Helpers::merge($this->config, DI\Helpers::expand($this->defaults, $builder->parameters)));
+
+		// Get extension configuration
+		$configuration = $this->getConfig();
+
+		Utils\Validators::assert($configuration['userEntity'], 'type|null', 'userEntity');
+		Utils\Validators::assert($configuration['lazyAssociation'], 'bool', 'lazyAssociation');
+		Utils\Validators::assert($configuration['automapField'], 'bool', 'automapField');
 
 		$builder->addDefinition($this->prefix('configuration'))
 			->setType(DoctrineBlameable\Configuration::class)
 			->setArguments([
-				$config['userEntity'],
-				$config['lazyAssociation'],
-				$config['automapField']
+				$configuration['userEntity'],
+				$configuration['lazyAssociation'],
+				$configuration['automapField']
 			]);
 
 		$userCallable = NULL;
 
-		if ($config['userCallable'] !== NULL) {
-			$definition = $builder->addDefinition($this->prefix(md5($config['userCallable'])));
+		if ($configuration['userCallable'] !== NULL) {
+			$definition = $builder->addDefinition($this->prefix(md5($configuration['userCallable'])));
 
 			list($factory) = DI\Helpers::filterArguments([
-				is_string($config['userCallable']) ? new DI\Statement($config['userCallable']) : $config['userCallable']
+				is_string($configuration['userCallable']) ? new DI\Statement($configuration['userCallable']) : $configuration['userCallable']
 			]);
 
 			$definition->setFactory($factory);
 
-			list($resolverClass) = (array) $builder->normalizeEntity($definition->getFactory()->getEntity());
+			list($resolverClass) = (array) $this->normalizeEntity($definition->getFactory()->getEntity());
 
 			if (class_exists($resolverClass)) {
 				$definition->setType($resolverClass);
@@ -104,7 +110,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface') ?: 'doctrine.default.entityManager')
+		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface', TRUE))
 			->addSetup('?->getEventManager()->addEventSubscriber(?)', ['@self', $builder->getDefinition($this->prefix('subscriber'))]);
 	}
 
@@ -119,5 +125,32 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new DoctrineBlameableExtension);
 		};
+	}
+
+	/**
+	 * @return string|array  Class, @service, [Class, member], [@service, member], [, globalFunc], [Statement, member]
+	 */
+	private function normalizeEntity($entity)
+	{
+		// Get container builder
+		$builder = $this->getContainerBuilder();
+
+		if (is_string($entity) && Nette\Utils\Strings::contains($entity, '::') && !Nette\Utils\Strings::contains($entity, '?')) { // Class::method -> [Class, method]
+			$entity = explode('::', $entity);
+		}
+
+		if (is_array($entity) && $entity[0] instanceof ServiceDefinition) { // [ServiceDefinition, ...] -> [@serviceName, ...]
+			$entity[0] = '@' . current(array_keys($builder->getDefinitions(), $entity[0], true));
+
+		} elseif ($entity instanceof DI\ServiceDefinition) { // ServiceDefinition -> @serviceName
+			$entity = '@' . current(array_keys($builder->getDefinitions(), $entity, true));
+
+		} elseif (is_array($entity) && $entity[0] === $builder) { // [$builder, ...] -> [@container, ...]
+			trigger_error("Replace object ContainerBuilder in Statement entity with '@container'.", E_USER_DEPRECATED);
+
+			$entity[0] = '@' . self::THIS_CONTAINER;
+		}
+
+		return $entity;
 	}
 }
