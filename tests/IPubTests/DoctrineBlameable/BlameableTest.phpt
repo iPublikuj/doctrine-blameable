@@ -26,6 +26,8 @@ use Doctrine;
 use Doctrine\ORM;
 use Doctrine\Common;
 
+use Nettrine;
+
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
 use IPub\DoctrineBlameable\Mapping;
@@ -74,9 +76,9 @@ class BlameableTest extends Tester\TestCase
 		parent::setUp();
 
 		$this->container = $this->createContainer();
-		$this->em = $this->container->getByType('Kdyby\Doctrine\EntityManager');
-		$this->subscriber = $this->container->getByType('IPub\DoctrineBlameable\Events\BlameableSubscriber');
-		$this->configuration = $this->container->getByType('IPub\DoctrineBlameable\Configuration');
+		$this->em = $this->container->getByType(Nettrine\ORM\EntityManagerDecorator::class);
+		$this->subscriber = $this->container->getByType(Events\BlameableSubscriber::class);
+		$this->configuration = $this->container->getByType(DoctrineBlameable\Configuration::class);
 	}
 
 	public function testCreate() : void
