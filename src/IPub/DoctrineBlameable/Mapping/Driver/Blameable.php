@@ -176,8 +176,8 @@ final class Blameable
 								'joinColumns'  => [
 									[
 										'onDelete' => 'SET NULL',
-									]
-								]
+									],
+								],
 							];
 
 							if (isset($blameable->association['column']) && $blameable->association['column'] !== NULL) {
@@ -190,7 +190,7 @@ final class Blameable
 
 							$metadata->mapManyToOne($entityMap);
 
-						} else if ($this->configuration->automapWithField()) {
+						} elseif ($this->configuration->automapWithField()) {
 							$metadata->mapField([
 								'fieldName' => $field,
 								'type'      => 'string',
@@ -209,7 +209,7 @@ final class Blameable
 				if ($metadata->hasField($field) && $this->isValidField($metadata, $field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
 					throw new Exceptions\InvalidMappingException("Field - [{$field}] type is not valid and must be 'string' or a one-to-many relation in class - {$metadata->getName()}");
 
-				} else if ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
+				} elseif ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
 					throw new Exceptions\InvalidMappingException("Association - [{$field}] is not valid, it must be a one-to-many relation or a string field - {$metadata->getName()}");
 				}
 

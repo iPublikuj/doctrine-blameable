@@ -1,6 +1,7 @@
 <?php
 /**
  * Test: IPub\DoctrineBlameable\Models
+ *
  * @testCase
  *
  * @copyright      More in license.md

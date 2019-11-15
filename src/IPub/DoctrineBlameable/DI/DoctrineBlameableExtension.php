@@ -54,12 +54,12 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	{
 		// Get container builder
 		$builder = $this->getContainerBuilder();
-
-		// Merge extension default config
-		$this->setConfig(DI\Config\Helpers::merge($this->config, DI\Helpers::expand($this->defaults, $builder->parameters)));
-
-		// Get extension configuration
-		$configuration = $this->getConfig();
+		/** @var array $configuration */
+		if (method_exists($this, 'validateConfig')) {
+			$configuration = $this->validateConfig($this->defaults);
+		} else {
+			$configuration = $this->getConfig($this->defaults);
+		}
 
 		Utils\Validators::assert($configuration['userEntity'], 'type|null', 'userEntity');
 		Utils\Validators::assert($configuration['lazyAssociation'], 'bool', 'lazyAssociation');
@@ -70,7 +70,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			->setArguments([
 				$configuration['userEntity'],
 				$configuration['lazyAssociation'],
-				$configuration['automapField']
+				$configuration['automapField'],
 			]);
 
 		$userCallable = NULL;
@@ -79,7 +79,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			$definition = $builder->addDefinition($this->prefix(md5($configuration['userCallable'])));
 
 			list($factory) = DI\Helpers::filterArguments([
-				is_string($configuration['userCallable']) ? new DI\Statement($configuration['userCallable']) : $configuration['userCallable']
+				is_string($configuration['userCallable']) ? new DI\Statement($configuration['userCallable']) : $configuration['userCallable'],
 			]);
 
 			$definition->setFactory($factory);
@@ -140,10 +140,10 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		}
 
 		if (is_array($entity) && $entity[0] instanceof ServiceDefinition) { // [ServiceDefinition, ...] -> [@serviceName, ...]
-			$entity[0] = '@' . current(array_keys($builder->getDefinitions(), $entity[0], true));
+			$entity[0] = '@' . current(array_keys($builder->getDefinitions(), $entity[0], TRUE));
 
 		} elseif ($entity instanceof DI\ServiceDefinition) { // ServiceDefinition -> @serviceName
-			$entity = '@' . current(array_keys($builder->getDefinitions(), $entity, true));
+			$entity = '@' . current(array_keys($builder->getDefinitions(), $entity, TRUE));
 
 		} elseif (is_array($entity) && $entity[0] === $builder) { // [$builder, ...] -> [@container, ...]
 			trigger_error("Replace object ContainerBuilder in Statement entity with '@container'.", E_USER_DEPRECATED);

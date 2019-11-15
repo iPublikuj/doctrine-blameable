@@ -29,10 +29,10 @@ interface IEntityEditor
 	/**
 	 * @param mixed $updatedBy
 	 */
-	function setUpdatedBy($updatedBy) : void;
+	public function setUpdatedBy($updatedBy) : void;
 
 	/**
 	 * @return mixed
 	 */
-	function getUpdatedBy();
+	public function getUpdatedBy();
 }
