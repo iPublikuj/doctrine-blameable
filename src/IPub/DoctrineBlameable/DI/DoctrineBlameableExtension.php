@@ -139,7 +139,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			$entity = explode('::', $entity);
 		}
 
-		if (is_array($entity) && $entity[0] instanceof ServiceDefinition) { // [ServiceDefinition, ...] -> [@serviceName, ...]
+		if (is_array($entity) && $entity[0] instanceof DI\ServiceDefinition) { // [ServiceDefinition, ...] -> [@serviceName, ...]
 			$entity[0] = '@' . current(array_keys($builder->getDefinitions(), $entity[0], TRUE));
 
 		} elseif ($entity instanceof DI\ServiceDefinition) { // ServiceDefinition -> @serviceName
