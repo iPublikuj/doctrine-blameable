@@ -29,10 +29,10 @@ interface IEntityRemover
 	/**
 	 * @param mixed $deletedBy
 	 */
-	function setDeletedBy($deletedBy) : void;
+	public function setDeletedBy($deletedBy) : void;
 
 	/**
 	 * @return mixed
 	 */
-	function getDeletedBy();
+	public function getDeletedBy();
 }

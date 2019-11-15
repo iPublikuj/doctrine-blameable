@@ -233,7 +233,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 		$classMetadata = $em->getClassMetadata(get_class($entity));
 
 		if ($config = $this->driver->getObjectConfigurations($em, $classMetadata->getName())) {
-			foreach(['update', 'create'] as $event) {
+			foreach (['update', 'create'] as $event) {
 				if (isset($config[$event])) {
 					$this->updateFields($config[$event], $uow, $entity, $classMetadata);
 				}
@@ -380,7 +380,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 		$user = $this->getUser();
 
 		if ($classMetadata->hasAssociation($field)) {
-			if ($user !== NULL && ! is_object($user)) {
+			if ($user !== NULL && !is_object($user)) {
 				throw new Exceptions\InvalidArgumentException("Blame is reference, user must be an object");
 			}
 
@@ -421,7 +421,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return bool
 	 */
-	private static function hasRegisteredListener(ORM\Mapping\ClassMetadata $classMetadata, string $eventName, string $listenerClass) : bool 
+	private static function hasRegisteredListener(ORM\Mapping\ClassMetadata $classMetadata, string $eventName, string $listenerClass) : bool
 	{
 		if (!isset($classMetadata->entityListeners[$eventName])) {
 			return FALSE;

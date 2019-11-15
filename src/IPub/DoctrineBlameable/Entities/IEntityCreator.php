@@ -29,10 +29,10 @@ interface IEntityCreator
 	/**
 	 * @param mixed $createdBy
 	 */
-	function setCreatedBy($createdBy) : void;
+	public function setCreatedBy($createdBy) : void;
 
 	/**
 	 * @return mixed
 	 */
-	function getCreatedBy();
+	public function getCreatedBy();
 }

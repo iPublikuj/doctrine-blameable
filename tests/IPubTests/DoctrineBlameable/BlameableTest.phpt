@@ -1,6 +1,7 @@
 <?php
 /**
  * Test: IPub\DoctrineBlameable\Blameable
+ *
  * @testCase
  *
  * @copyright      More in license.md
@@ -179,7 +180,7 @@ class BlameableTest extends Tester\TestCase
 		$tester = new Models\UserEntity;
 		$tester->setUsername('tester');
 
-		$userCallback = function() use($creator) {
+		$userCallback = function () use ($creator) {
 			return $creator;
 		};
 
@@ -242,7 +243,7 @@ class BlameableTest extends Tester\TestCase
 		$user = new Models\UserEntity;
 		$user->setUsername('user');
 
-		$userCallback = function() use($user) {
+		$userCallback = function () use ($user) {
 			return $user;
 		};
 
