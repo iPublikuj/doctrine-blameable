@@ -2,13 +2,24 @@ php:
 	date.timezone: Europe/Prague
 
 extensions:
-	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
-	nettrineCache				: Nettrine\Cache\DI\CacheExtension
-	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
-	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
-	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
-	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
-	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
+	contributteConsole		: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	nettrineAnnotations		: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache			: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal			: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm				: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations	: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole		: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache		: Nettrine\ORM\DI\OrmCacheExtension
+
+contributteConsole:
+	name: iPublikuj:Packages!
+	version: '1.0'
+	catchExceptions: true
+	autoExit: true
+	url: http://example.com
+	lazy: false
+	helperSet: \Symfony\Component\Console\Helper\HelperSet
+	helpers: []
 
 nettrineDbal:
 	connection:
