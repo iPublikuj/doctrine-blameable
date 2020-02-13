@@ -10,11 +10,6 @@ extensions:
 	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
 
-	dbal: Nettrine\DBAL\DI\DbalExtension
-	orm: Nettrine\ORM\DI\OrmExtension
-	orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
-	orm.cache: Nettrine\ORM\DI\OrmCacheExtension
-
 nettrineDbal:
 	connection:
 		host: 127.0.0.1
