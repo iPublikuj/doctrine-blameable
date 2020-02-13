@@ -64,24 +64,19 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 				$configuration->automapField,
 			]);
 
-		$userCallable = NULL;
+		$userCallableDefinition = NULL;
 
 		if ($configuration->userCallable !== NULL) {
-			$definition = $builder->addDefinition($this->prefix(md5($configuration->userCallable)));
+			$userCallableDefinition = $builder->addDefinition($this->prefix('userCallable'));
 
-			[$factory] = DI\Helpers::filterArguments([
-				is_string($configuration->userCallable) ? new DI\Definitions\Statement($configuration->userCallable) : $configuration->userCallable,
-			]);
+			$factory = is_string($configuration->userCallable) ? new DI\Definitions\Statement($configuration->userCallable) : $configuration->userCallable;
+			$userCallableDefinition->setFactory($factory);
 
-			$definition->setFactory($factory);
-
-			[$resolverClass] = (array) $this->normalizeEntity($definition->getFactory());
+			[$resolverClass] = (array) $this->normalizeEntity($userCallableDefinition->getFactory());
 
 			if (class_exists($resolverClass)) {
-				$definition->setType($resolverClass);
+				$userCallableDefinition->setType($resolverClass);
 			}
-
-			$userCallable = $definition;
 		}
 
 		$builder->addDefinition($this->prefix('driver'))
@@ -89,7 +84,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder->addDefinition($this->prefix('subscriber'))
 			->setType(Events\BlameableSubscriber::class)
-			->setArguments([$userCallable instanceof DI\Definitions\ServiceDefinition ? '@' . $userCallable->getType() : NULL]);
+			->setArguments([$userCallableDefinition instanceof DI\Definitions\ServiceDefinition ? $userCallableDefinition : NULL]);
 	}
 
 	/**
