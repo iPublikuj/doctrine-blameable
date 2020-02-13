@@ -46,7 +46,6 @@
 
     "nette/di" : "~3.0",
     "nette/utils" : "~3.0",
-    "nette/reflection" : "~2.4",
     "nette/security" : "~3.0"
   },
 
@@ -62,7 +61,8 @@
 
     "pds/skeleton" : "~1.0",
 
-    "nettrine/orm" : "~0.3"
+    "nettrine/orm" : "~0.3",
+    "contributte/console" : "~0.7"
   },
 
   "autoload" : {
