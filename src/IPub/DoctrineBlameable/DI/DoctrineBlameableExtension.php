@@ -18,7 +18,7 @@ namespace IPub\DoctrineBlameable\DI;
 
 use Nette;
 use Nette\DI;
-use Nette\Utils;
+use Nette\Schema;
 
 use IPub\DoctrineBlameable;
 use IPub\DoctrineBlameable\Events;
@@ -36,55 +36,46 @@ use IPub\DoctrineBlameable\Security;
 final class DoctrineBlameableExtension extends DI\CompilerExtension
 {
 	/**
-	 * @var array
+	 * {@inheritdoc}
 	 */
-	private $defaults = [
-		'lazyAssociation' => FALSE,
-		'userEntity'      => NULL,
-		'automapField'    => TRUE,
-		'userCallable'    => Security\UserCallable::class,
-	];
+	public function getConfigSchema() : Schema\Schema
+	{
+		return Schema\Expect::structure([
+			'lazyAssociation' => Schema\Expect::bool(FALSE),
+			'userEntity'      => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->nullable(),
+			'automapField'    => Schema\Expect::bool(TRUE),
+			'userCallable'    => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->default(Security\UserCallable::class),
+		]);
+	}
 
 	/**
-	 * @return void
-	 *
-	 * @throws Utils\AssertionException
+	 * {@inheritdoc}
 	 */
 	public function loadConfiguration() : void
 	{
-		// Get container builder
 		$builder = $this->getContainerBuilder();
-		/** @var array $configuration */
-		if (method_exists($this, 'validateConfig')) {
-			$configuration = $this->validateConfig($this->defaults);
-		} else {
-			$configuration = $this->getConfig($this->defaults);
-		}
-
-		Utils\Validators::assert($configuration['userEntity'], 'type|null', 'userEntity');
-		Utils\Validators::assert($configuration['lazyAssociation'], 'bool', 'lazyAssociation');
-		Utils\Validators::assert($configuration['automapField'], 'bool', 'automapField');
+		$configuration = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('configuration'))
 			->setType(DoctrineBlameable\Configuration::class)
 			->setArguments([
-				$configuration['userEntity'],
-				$configuration['lazyAssociation'],
-				$configuration['automapField'],
+				$configuration->userEntity,
+				$configuration->lazyAssociation,
+				$configuration->automapField,
 			]);
 
 		$userCallable = NULL;
 
-		if ($configuration['userCallable'] !== NULL) {
-			$definition = $builder->addDefinition($this->prefix(md5($configuration['userCallable'])));
+		if ($configuration->userCallable !== NULL) {
+			$definition = $builder->addDefinition($this->prefix(md5($configuration->userCallable)));
 
-			list($factory) = DI\Helpers::filterArguments([
-				is_string($configuration['userCallable']) ? new DI\Statement($configuration['userCallable']) : $configuration['userCallable'],
+			[$factory] = DI\Helpers::filterArguments([
+				is_string($configuration->userCallable) ? new DI\Definitions\Statement($configuration->userCallable) : $configuration->userCallable,
 			]);
 
 			$definition->setFactory($factory);
 
-			list($resolverClass) = (array) $this->normalizeEntity($definition->getFactory()->getEntity());
+			[$resolverClass] = (array) $this->normalizeEntity($definition->getFactory());
 
 			if (class_exists($resolverClass)) {
 				$definition->setType($resolverClass);
@@ -98,7 +89,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder->addDefinition($this->prefix('subscriber'))
 			->setType(Events\BlameableSubscriber::class)
-			->setArguments([$userCallable instanceof DI\ServiceDefinition ? '@' . $userCallable->getType() : NULL]);
+			->setArguments([$userCallable instanceof DI\Definitions\ServiceDefinition ? '@' . $userCallable->getType() : NULL]);
 	}
 
 	/**
@@ -120,14 +111,18 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 	 *
 	 * @return void
 	 */
-	public static function register(Nette\Configurator $config, string $extensionName = 'doctrineBlameable') : void
-	{
+	public static function register(
+		Nette\Configurator $config,
+		string $extensionName = 'doctrineBlameable'
+	) : void {
 		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new DoctrineBlameableExtension);
 		};
 	}
 
 	/**
+	 * @param $entity
+	 *
 	 * @return string|array  Class, @service, [Class, member], [@service, member], [, globalFunc], [Statement, member]
 	 */
 	private function normalizeEntity($entity)
@@ -135,20 +130,32 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		// Get container builder
 		$builder = $this->getContainerBuilder();
 
-		if (is_string($entity) && Nette\Utils\Strings::contains($entity, '::') && !Nette\Utils\Strings::contains($entity, '?')) { // Class::method -> [Class, method]
+		if (
+			is_string($entity)
+			&& Nette\Utils\Strings::contains($entity, '::')
+			&& !Nette\Utils\Strings::contains($entity, '?')
+		) { // Class::method -> [Class, method]
 			$entity = explode('::', $entity);
 		}
 
-		if (is_array($entity) && $entity[0] instanceof DI\ServiceDefinition) { // [ServiceDefinition, ...] -> [@serviceName, ...]
+		if (
+			is_array($entity)
+			&& $entity[0] instanceof DI\Definitions\ServiceDefinition
+		) { // [ServiceDefinition, ...] -> [@serviceName, ...]
 			$entity[0] = '@' . current(array_keys($builder->getDefinitions(), $entity[0], TRUE));
 
-		} elseif ($entity instanceof DI\ServiceDefinition) { // ServiceDefinition -> @serviceName
+		} elseif (
+			$entity instanceof DI\Definitions\ServiceDefinition
+		) { // ServiceDefinition -> @serviceName
 			$entity = '@' . current(array_keys($builder->getDefinitions(), $entity, TRUE));
 
-		} elseif (is_array($entity) && $entity[0] === $builder) { // [$builder, ...] -> [@container, ...]
+		} elseif (
+			is_array($entity)
+			&& $entity[0] === $builder
+		) { // [$builder, ...] -> [@container, ...]
 			trigger_error("Replace object ContainerBuilder in Statement entity with '@container'.", E_USER_DEPRECATED);
 
-			$entity[0] = '@' . self::THIS_CONTAINER;
+			$entity[0] = '@' . md5($entity);
 		}
 
 		return $entity;
