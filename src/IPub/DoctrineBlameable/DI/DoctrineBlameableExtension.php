@@ -72,7 +72,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			$factory = is_string($configuration->userCallable) ? new DI\Definitions\Statement($configuration->userCallable) : $configuration->userCallable;
 			$userCallableDefinition->setFactory($factory);
 
-			[$resolverClass] = (array) $this->normalizeEntity($userCallableDefinition->getFactory());
+			list($resolverClass) = (array) $this->normalizeEntity($userCallableDefinition->getFactory()->getEntity());
 
 			if (class_exists($resolverClass)) {
 				$userCallableDefinition->setType($resolverClass);
