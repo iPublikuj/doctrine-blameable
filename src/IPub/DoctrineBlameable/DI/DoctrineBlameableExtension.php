@@ -16,6 +16,8 @@ declare(strict_types = 1);
 
 namespace IPub\DoctrineBlameable\DI;
 
+use Doctrine;
+
 use Nette;
 use Nette\DI;
 use Nette\Schema;
@@ -96,7 +98,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface', TRUE))
+		$builder->getDefinition($builder->getByType(Doctrine\ORM\EntityManagerInterface::class, TRUE))
 			->addSetup('?->getEventManager()->addEventSubscriber(?)', ['@self', $builder->getDefinition($this->prefix('subscriber'))]);
 	}
 

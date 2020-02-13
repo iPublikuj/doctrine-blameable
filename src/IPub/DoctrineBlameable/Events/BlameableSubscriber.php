@@ -84,6 +84,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function loadClassMetadata(ORM\Event\LoadClassMetadataEventArgs $eventArgs) : void
@@ -105,6 +106,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs) : void
@@ -224,6 +226,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function prePersist($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
@@ -247,6 +250,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function preUpdate($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
@@ -268,6 +272,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function preRemove($entity, ORM\Event\LifecycleEventArgs $eventArgs) : void
