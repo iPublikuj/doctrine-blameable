@@ -16,6 +16,8 @@ declare(strict_types = 1);
 
 namespace IPub\DoctrineBlameable\DI;
 
+use Doctrine;
+
 use Nette;
 use Nette\DI;
 use Nette\Schema;
@@ -43,7 +45,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 		return Schema\Expect::structure([
 			'lazyAssociation' => Schema\Expect::bool(FALSE),
 			'userEntity'      => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->nullable(),
-			'automapField'    => Schema\Expect::bool(TRUE),
+			'autoMapField'    => Schema\Expect::bool(TRUE),
 			'userCallable'    => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->default(Security\UserCallable::class),
 		]);
 	}
@@ -61,7 +63,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			->setArguments([
 				$configuration->userEntity,
 				$configuration->lazyAssociation,
-				$configuration->automapField,
+				$configuration->autoMapField,
 			]);
 
 		$userCallableDefinition = NULL;
@@ -96,7 +98,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		$builder->getDefinition($builder->getByType('Doctrine\ORM\EntityManagerInterface', TRUE))
+		$builder->getDefinition($builder->getByType(Doctrine\ORM\EntityManagerInterface::class, TRUE))
 			->addSetup('?->getEventManager()->addEventSubscriber(?)', ['@self', $builder->getDefinition($this->prefix('subscriber'))]);
 	}
 

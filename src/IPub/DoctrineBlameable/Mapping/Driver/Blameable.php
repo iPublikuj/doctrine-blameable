@@ -171,7 +171,7 @@ final class Blameable
 
 				// No map field nor association
 				if ($metadata->hasField($field) === FALSE && $metadata->hasAssociation($field) === FALSE && $this->configuration->useLazyAssociation() === FALSE) {
-					if ($this->configuration->automapField) {
+					if ($this->configuration->autoMapField) {
 						if ($this->configuration->automapWithAssociation()) {
 							$entityMap = [
 								'targetEntity' => $this->configuration->userEntity,
