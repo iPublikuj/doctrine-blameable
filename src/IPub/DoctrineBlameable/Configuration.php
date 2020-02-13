@@ -53,18 +53,18 @@ final class Configuration
 	 *
 	 * @var bool
 	 */
-	public $automapField = TRUE;
+	public $autoMapField = TRUE;
 
 	/**
 	 * @param string|NULL $userEntity
 	 * @param bool $lazyAssociation
-	 * @param bool $automapField
+	 * @param bool $autoMapField
 	 */
-	public function __construct(string $userEntity = NULL, bool $lazyAssociation = FALSE, bool $automapField = FALSE)
+	public function __construct(string $userEntity = NULL, bool $lazyAssociation = FALSE, bool $autoMapField = FALSE)
 	{
 		$this->userEntity = $userEntity;
 		$this->lazyAssociation = $lazyAssociation;
-		$this->automapField = $automapField;
+		$this->autoMapField = $autoMapField;
 	}
 
 	/**
@@ -72,7 +72,7 @@ final class Configuration
 	 */
 	public function automapWithAssociation() : bool
 	{
-		if ($this->userEntity !== NULL && class_exists($this->userEntity) && $this->automapField === TRUE) {
+		if ($this->userEntity !== NULL && class_exists($this->userEntity) && $this->autoMapField === TRUE) {
 			return TRUE;
 		}
 
@@ -84,7 +84,7 @@ final class Configuration
 	 */
 	public function automapWithField() : bool
 	{
-		if ($this->userEntity === NULL && $this->automapField === TRUE) {
+		if ($this->userEntity === NULL && $this->autoMapField === TRUE) {
 			return TRUE;
 		}
 
