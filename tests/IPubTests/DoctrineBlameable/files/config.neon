@@ -2,19 +2,28 @@ php:
 	date.timezone: Europe/Prague
 
 extensions:
+	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache				: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
+
 	dbal: Nettrine\DBAL\DI\DbalExtension
 	orm: Nettrine\ORM\DI\OrmExtension
 	orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
 	orm.cache: Nettrine\ORM\DI\OrmCacheExtension
 
-dbal:
+nettrineDbal:
 	connection:
 		host: 127.0.0.1
 		driver: pdo_sqlite
 		memory: true
 
-orm.annotations:
-	defaultCache: array
+nettrineAnnotations:
+	debug: %debugMode%
 
-orm.cache:
-	defaultDriver: array
+nettrineOrm:
+	configuration:
+		proxyDir	: %tempDir%/cache/doctrine.proxies
