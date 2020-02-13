@@ -82,10 +82,13 @@ final class Blameable
 	 *
 	 * @return void
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
-	public function loadMetadataForObjectClass(Common\Persistence\ObjectManager $objectManager, ORM\Mapping\ClassMetadata $classMetadata) : void
-	{
+	public function loadMetadataForObjectClass(
+		Common\Persistence\ObjectManager $objectManager,
+		ORM\Mapping\ClassMetadata $classMetadata
+	) : void {
 		if ($classMetadata->isMappedSuperclass) {
 			return; // Ignore mappedSuperclasses for now
 		}
@@ -250,6 +253,7 @@ final class Blameable
 	 *
 	 * @return array
 	 *
+	 * @throws Common\Annotations\AnnotationException
 	 * @throws ORM\Mapping\MappingException
 	 */
 	public function getObjectConfigurations(Common\Persistence\ObjectManager $objectManager, string $class) : array

@@ -72,7 +72,7 @@ final class BlameableSubscriber implements Common\EventSubscriber
 	 * @param Mapping\Driver\Blameable $driver
 	 */
 	public function __construct(
-		$userCallable = NULL,
+		?callable $userCallable = NULL,
 		Mapping\Driver\Blameable $driver
 	) {
 		$this->driver = $driver;
