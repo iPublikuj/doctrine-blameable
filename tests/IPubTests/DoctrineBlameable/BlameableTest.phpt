@@ -19,13 +19,13 @@ declare(strict_types = 1);
 namespace IPubTests\DoctrineBlameable;
 
 use Nette;
+use Nette\DI;
 
 use Tester;
 use Tester\Assert;
 
 use Doctrine;
 use Doctrine\ORM;
-use Doctrine\Common;
 
 use Nettrine;
 
@@ -50,7 +50,7 @@ require_once __DIR__ . DS . 'models' . DS . 'UserEntity.php';
 class BlameableTest extends Tester\TestCase
 {
 	/**
-	 * @var \Nette\DI\Container
+	 * @var DI\Container
 	 */
 	private $container;
 
