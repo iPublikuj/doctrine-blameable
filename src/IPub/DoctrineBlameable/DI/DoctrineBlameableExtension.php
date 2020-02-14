@@ -46,7 +46,7 @@ final class DoctrineBlameableExtension extends DI\CompilerExtension
 			'lazyAssociation' => Schema\Expect::bool(FALSE),
 			'userEntity'      => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->nullable(),
 			'autoMapField'    => Schema\Expect::bool(TRUE),
-			'userCallable'    => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->default(Security\UserCallable::class),
+			'userCallable'    => Schema\Expect::anyOf(Schema\Expect::string(), Schema\Expect::type(DI\Definitions\Statement::class))->default(Security\UserCallable::class)->nullable(),
 		]);
 	}
 
